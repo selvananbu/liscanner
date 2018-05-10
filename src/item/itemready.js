@@ -56,7 +56,7 @@ export default class ItemReady extends Component {
 			 ScanExample.startScan('RACK',this.props.barcode);
 		}
 		else if(item == '1'){
-			 ScanExample.startScan('ITEM',this.props.barcode.orderNo.toString());
+			 ScanExample.startScan('ITEM ',this.props.barcode.orderNo.toString());
 		}
 	}
 
