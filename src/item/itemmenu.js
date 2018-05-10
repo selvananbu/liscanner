@@ -36,20 +36,24 @@ export default class Item_menu extends Component {
 			isLoading: false,
 			GridViewItems: [
 				{
-				key: ' ITEM\n READY',
+					key:0,
+				text: ' ITEM\n READY',
 					MenuIcon_url:'src_image_item_ready'
 				},
 				{
-				key: '  ITEM\n READY/QTY',
+					key:1,
+				text: '  ITEM\n READY/QTY',
 				MenuIcon_url:'src_image_item_ready_qty'
 				},
 
 				{
-				key: ' ITEM\n BROKEN',
+					key:2,
+				text: ' ITEM\n BROKEN',
 				MenuIcon_url:'src_image_item_broken'
 				},
 				{
-				key: ' ITEM\n RELOAD',
+					key:3,
+				text: ' ITEM\n RELOAD',
 				MenuIcon_url:'src_image_item_reload'
 				},
 				],
@@ -60,55 +64,28 @@ export default class Item_menu extends Component {
 	}
 
 	Gotomainmenu  = (item) => {
-		console.log("====",item);
-		if (item===" ITEM\n READY")
+		console.log("###",item);
+		console.log("###",item.text);
+
+		if (item.text===" ITEM\n READY")
+		{
+				Actions.ItemReady({title:'LiScanner - Item - Ready'})
+		}
+		else if(item.text ==="  ITEM\n READY/QTY")
+		{
+			Actions.ItemReadyQuantity({title:'LiScanner - Item - Ready/QTY'})
+		}
+		else if(item.text === " ITEM\n BROKEN")
 			{
-				console.log("######",item);
-				Actions.ItemReady({title:'LiScanner - Item - Ready',GridViewItems:[		{
-				  key:'0',
-					text: 'RACK',
-					MenuIcon_url:'src_image_rack'
-					},
-					{
-				  key:'1',
-					text: 'ITEM',
-					MenuIcon_url:'src_image_item'
-					},]}) }
-		else if(item ==="  ITEM\n READY/QTY")
-		{Actions.ItemReady({title:'LiScanner - Item - Ready/QTY',GridViewItems:[		{
-			key:'0',
-			text: 'RACK',
-			MenuIcon_url:'src_image_rack'
-			},
-			{
-			key:'1',
-			text: 'ITEM',
-			MenuIcon_url:'src_image_item'
-			},
-			{
-			key:'2',
-			text: 'QUANTITY',
-			MenuIcon_url:'src_image_quantity'
-			},
-		],
-		isQtyReadyScreen:true
-	 })}
-		else if(item === " ITEM\n BROKEN")
-			{Actions.ItemBroken()}
-			else if(item === " ITEM\n RELOAD")
-			 {Actions.ItemReady({title:'LiScanner - Item - Reload',GridViewItems:[		{
-				 key:'0',
-				 text: 'RACK',
-				 MenuIcon_url:'src_image_rack'
-				 },
-				 {
-				 key:'1',
-				 text: 'ITEM',
-				 MenuIcon_url:'src_image_item'
-				 },
-				]
-			})}
-		else{Alert.alert(item);}
+				Actions.ItemBroken({title:'LiScanner - Item - Broken'})
+			}
+			else if(item.text === " ITEM\n RELOAD")
+			 {
+				 Actions.ItemReady({title:'LiScanner - Item - Reload'})
+		   }
+		else{
+			Alert.alert(item.text);
+		}
 		}
 
 	_onPress() {
@@ -141,7 +118,10 @@ export default class Item_menu extends Component {
 
 
 		return (
-		<LiFlatList Menu = {this.state.GridViewItems} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item.key)}/>
+			<Container>
+					<LiFlatList Menu = {this.state.GridViewItems} columnCount = {2} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item)}/>
+			</Container>
+
 		);
 	}
 }

@@ -22,22 +22,22 @@ import ScanExample from '../nativeconnector/scanconnector';
 
 import item from '../image/item.png';
 import reason from '../image/reason.png';
+import LiFlatList from './liflatlist';
 
-
-export default class ItemReadyQuantity extends Component {
+export default class ItemBroken extends Component {
   constructor(props) {
 		super(props);
 
 		this.state = {
 			isLoading: false,
-			GridViewItems: [
+      GridViewItems: [
 				{
-				key: 0,
+				key:'0',
         text: 'Reason',
 					MenuIcon_url:'src_image_reason'
 				},
 				{
-				key: 1,
+				key: '1',
         text:'Item',
 				MenuIcon_url:'src_image_item'
 				},
@@ -45,14 +45,14 @@ export default class ItemReadyQuantity extends Component {
 
         GridViewSubmitItems: [
           {
-            key: 3,
+            key: '3',
             text:'READY'
           },
           ],
 		};
 	}
 	onButtonClicked  = (item) => {
-        if(item.key !== 3)
+        if(item.key !=='3')
                 ScanExample.startScan(item.key,this.props.barcode);
         else {
                 //Start Ready Messgae
@@ -63,54 +63,27 @@ export default class ItemReadyQuantity extends Component {
 
 		return (
       <Container>
-          <FlatList
-            data={ this.state.GridViewItems }
-            renderItem={({item}) =>{
-              var isRack = false;
-              var barcode = "";
-              if(this.props.barcode != null)
-                barcode = this.props.barcode.orderNo;
-              if(item.key == "RACK" && this.props.barcode != null)
-                  isRack = true;
-                          return (
-                  <View style={styles.GridViewBlockStyle}>
-                                      <TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center',}}onPress={this.onButtonClicked.bind(this, item.key)}>
-                                      <Text style={styles.GridViewInsideTextItemStyle}  onPress={this.onButtonClicked.bind(this,item.key)} > {item.text}  </Text>
+          <LiFlatList Menu = {this.state.GridViewItems} columnCount = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item.key)}/>
 
-
-                      <Text style={styles.GridViewInsideTextItemStyle} >
-                        {isRack ? barcode : this.props.rackId }
-                      </Text>
-                      <Image
-                      source={{uri:item.MenuIcon_url}}
-                      style={styles.ImageIconStyle}
-                      />
-                                      </TouchableOpacity>
-
-                                  </View>);
-                        }
-                  }
-             numColumns={1}
-          />
           <View>
-                <FlatList
-                          data={ this.state.GridViewSubmitItems }
-                          renderItem={({item}) =>{
-                              return (
-                <View style={styles.GridViewBlockStyle2}>
-                  <TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center',}}onPress={this.onButtonClicked.bind(this, item.key)}>
-                    <Text style={styles.GridViewInsideTextItemStyle2}  onPress={this.onButtonClicked.bind(this,item.key)} > {item.text}  </Text>
-                    <Image
-                      source={{uri: item.MenuIcon_url}}
-                      style={styles.ImageIconStyle2}
-                    />
-                  </TouchableOpacity>
-                              </View>);
-                                                  }
-                                      }
-                          numColumns={1}
+                  <FlatList
+                            data={ this.state.GridViewSubmitItems }
+                            renderItem={({item}) =>{
+                                return (
+                  <View style={styles.GridViewBlockStyle2}>
+                    <TouchableOpacity style={{height:120,width:260,alignItems: 'center', justifyContent: 'center',}} onPress={this.onButtonClicked.bind(this, item.key)}>
+                      <Text style={styles.GridViewInsideTextItemStyle2}  onPress={this.onButtonClicked.bind(this,item.key)} > {item.text}  </Text>
+                      <Image
+                        source={{uri: item.MenuIcon_url}}
+                        style={styles.ImageIconStyle2}
                       />
-                  </View>
+                    </TouchableOpacity>
+                                </View>);
+                                                    }
+                                        }
+                            numColumns={1}
+                        />
+                    </View>
       </Container>
       );
 	}

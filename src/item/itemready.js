@@ -28,7 +28,16 @@ export default class ItemReady extends Component {
 		this.state = {
 			isLoading: false,
 			GridViewItems: [
-
+				{
+					key:'0',
+				text: 'Rack',
+					MenuIcon_url:'src_image_rack'
+				},
+				{
+					key:'1',
+				text: 'Item',
+				MenuIcon_url:'src_image_item'
+				},
 			  ],
 
 			GridViewSubmitItems: [
@@ -54,7 +63,6 @@ export default class ItemReady extends Component {
 
 	render() {
 
-				console.log("=======",this.props.rackId);
 		if(this.props.title !== null)
  					ScanExample.setTitle(this.props.title);
 
@@ -65,7 +73,7 @@ export default class ItemReady extends Component {
 
 		<Container>
 				<FlatList
-					data={ this.props.GridViewItems }
+					data={ this.state.GridViewItems }
 					renderItem={({item}) =>{
 
 						var isRack = false;
@@ -90,7 +98,8 @@ export default class ItemReady extends Component {
 										/>
                                     </TouchableOpacity>
 
-                                </View>);
+                                </View>
+															);
 											}
 								}
 					 numColumns={1}

@@ -46,6 +46,12 @@ export default class App extends Component<Props> {
               BackHandler.exitApp();
               return true;
           }
+        if(scene === 'ItemReady')
+        {
+            ScanExample.setTitle("LiScanner - Item");
+            Actions.ItemMenu();
+            return true;
+        }
         if(scene == 'ItemMenu')
           ScanExample.setTitle("LiScanner");
         if(scene == 'ItemReadyQuantity' || scene === 'ItemReady' || scene === 'ItemBroken')
