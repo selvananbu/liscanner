@@ -51,7 +51,6 @@ export default class ItemReadyQuantity extends Component {
           ],
 		};
 	}
-
 	onButtonClicked  = (item) => {
         if(item.key !== 3)
                 ScanExample.startScan(item.key,this.props.barcode);
@@ -67,7 +66,6 @@ export default class ItemReadyQuantity extends Component {
           <FlatList
             data={ this.state.GridViewItems }
             renderItem={({item}) =>{
-
               var isRack = false;
               var barcode = "";
               if(this.props.barcode != null)
