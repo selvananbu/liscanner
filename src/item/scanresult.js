@@ -35,12 +35,12 @@ export default class ScanResult extends Component {
 
         if(this.props.barcode !== null && this.props.barcode != undefined){
           Actions.ItemReady({title:'LiScanner - Item - Ready',GridViewItems:[		{
-              key:0,
+              key:'0',
               text: 'RACK',
               MenuIcon_url:'src_image_rack'
               },
               {
-              key:1,
+              key:'1',
               text: 'ITEM',
               MenuIcon_url:'src_image_item',
               barcode:item,
@@ -50,12 +50,12 @@ export default class ScanResult extends Component {
 
         else{
             Actions.ItemReady({title:'LiScanner - Item - Ready',GridViewItems:[		{
-      				  key:0,
+      				  key:'0',
       					text: 'RACK',
       					MenuIcon_url:'src_image_rack'
       					},
       					{
-      				  key:1,
+      				  key:'1',
       					text: 'ITEM',
       					MenuIcon_url:'src_image_item',
                 barcode:item
