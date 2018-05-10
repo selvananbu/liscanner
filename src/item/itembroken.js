@@ -59,8 +59,6 @@ export default class ItemReadyQuantity extends Component {
                 //Start Ready Messgae
         }
 		}
-
-
 	render() {
 	 ScanExample.setTitle("Li.Scanner - Item - Ready - Broken");
 
@@ -119,7 +117,6 @@ export default class ItemReadyQuantity extends Component {
       );
 	}
 }
-
 const styles = StyleSheet.create({
 
   GridViewBlockStyle: {
