@@ -25,6 +25,8 @@ import quantity from '../image/quantity.png';
 
 import ScanExample from '../nativeconnector/scanconnector';
 
+import LiFlatList from './liflatlist';
+
 export default class Item_menu extends Component {
 
 	constructor(props) {
@@ -57,31 +59,34 @@ export default class Item_menu extends Component {
 		this.growAnimated = new Animated.Value(0);
 	}
 
-	Gotomenu  = (item) => {
+	Gotomainmenu  = (item) => {
+		console.log("====",item);
 		if (item===" ITEM\n READY")
-			{ Actions.ItemReady({title:'LiScanner - Item - Ready',GridViewItems:[		{
-				  key:0,
+			{
+				console.log("######",item);
+				Actions.ItemReady({title:'LiScanner - Item - Ready',GridViewItems:[		{
+				  key:'0',
 					text: 'RACK',
 					MenuIcon_url:'src_image_rack'
 					},
 					{
-				  key:1,
+				  key:'1',
 					text: 'ITEM',
 					MenuIcon_url:'src_image_item'
 					},]}) }
 		else if(item ==="  ITEM\n READY/QTY")
 		{Actions.ItemReady({title:'LiScanner - Item - Ready/QTY',GridViewItems:[		{
-			key:0,
+			key:'0',
 			text: 'RACK',
 			MenuIcon_url:'src_image_rack'
 			},
 			{
-			key:1,
+			key:'1',
 			text: 'ITEM',
 			MenuIcon_url:'src_image_item'
 			},
 			{
-			key:2,
+			key:'2',
 			text: 'QUANTITY',
 			MenuIcon_url:'src_image_quantity'
 			},
@@ -92,12 +97,12 @@ export default class Item_menu extends Component {
 			{Actions.ItemBroken()}
 			else if(item === " ITEM\n RELOAD")
 			 {Actions.ItemReady({title:'LiScanner - Item - Reload',GridViewItems:[		{
-				 key:0,
+				 key:'0',
 				 text: 'RACK',
 				 MenuIcon_url:'src_image_rack'
 				 },
 				 {
-				 key:1,
+				 key:'1',
 				 text: 'ITEM',
 				 MenuIcon_url:'src_image_item'
 				 },
@@ -127,7 +132,6 @@ export default class Item_menu extends Component {
 	}
 
 
-
 	render() {
 	 ScanExample.setTitle("Li.Scanner - Item");
 		const changeScale = this.growAnimated.interpolate({
@@ -135,30 +139,9 @@ export default class Item_menu extends Component {
 			outputRange: [1, 40],
 		});
 
-		return (
-		<Container>
-			{/* <Wallpaper> */}
-				<FlatList
 
-					data={ this.state.GridViewItems }
-					renderItem={({item}) =>{
-					return (
-						<View style={styles.GridViewBlockStyle}>
-						<TouchableOpacity style={{alignItems: 'center', justifyContent: 'center',}}onPress={this.Gotomenu.bind(this, item.key)}>
-						<Text style={styles.GridViewInsideTextItemStyle}  onPress={this.Gotomenu.bind(this,item.key)} > {item.key}  </Text>
-						<Image
-						 source={{uri:item.MenuIcon_url}}
-						 style={styles.ImageIconStyle}
-						 />
-						</TouchableOpacity>
-					 </View>
-							);
-											}
-									}
-					 numColumns={2}
-				/>
-			{/* </Wallpaper>	 */}
-		</Container>
+		return (
+		<LiFlatList Menu = {this.state.GridViewItems} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item.key)}/>
 		);
 	}
 }

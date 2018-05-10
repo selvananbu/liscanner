@@ -39,14 +39,14 @@ export default class ItemReady extends Component {
 	}
 
 	Gotomenu  = (item) => {
-		if (item=== 2)
+		if (item=== '2')
 			{
 			ScanExample.startOrderApp(this.props.rack,this.props.item);
 			}
-		else if(item == 0){
+		else if(item == '0'){
 			 ScanExample.startScan('RACK',this.props.barcode);
 		}
-		else if(item == 1){
+		else if(item == '1'){
 			 ScanExample.startScan('ITEM',this.props.barcode.orderNo.toString());
 		}
 	}
@@ -67,6 +67,7 @@ export default class ItemReady extends Component {
 				<FlatList
 					data={ this.props.GridViewItems }
 					renderItem={({item}) =>{
+
 						var isRack = false;
 						var barcode = "";
 						if(this.props.barcode != null)
