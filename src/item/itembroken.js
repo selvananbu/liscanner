@@ -51,6 +51,9 @@ export default class ItemBroken extends Component {
           ],
 		};
 	}
+  Gotomenu  = (item) => {
+
+  }
 	onButtonClicked  = (item) => {
         if(item.key !=='3')
                 ScanExample.startScan(item.key,this.props.barcode);
@@ -59,32 +62,13 @@ export default class ItemBroken extends Component {
         }
 		}
 	render() {
-	 ScanExample.setTitle("Li.Scanner - Item - Ready - Broken");
+	 ScanExample.setTitle("Li.Scanner - Item  - Broken");
 
 		return (
       <Container>
-          <LiFlatList Menu = {this.state.GridViewItems} columnCount = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item.key)}/>
-
-          <View>
-                  <FlatList
-                            data={ this.state.GridViewSubmitItems }
-                            renderItem={({item}) =>{
-                                return (
-                  <View style={styles.GridViewBlockStyle2}>
-                    <TouchableOpacity style={{height:120,width:260,alignItems: 'center', justifyContent: 'center',}} onPress={this.onButtonClicked.bind(this, item.key)}>
-                      <Text style={styles.GridViewInsideTextItemStyle2}  onPress={this.onButtonClicked.bind(this,item.key)} > {item.text}  </Text>
-                      <Image
-                        source={{uri: item.MenuIcon_url}}
-                        style={styles.ImageIconStyle2}
-                      />
-                    </TouchableOpacity>
-                                </View>);
-                                                    }
-                                        }
-                            numColumns={1}
-                        />
-                    </View>
-      </Container>
+          <LiFlatList Menu = {this.state.GridViewItems} columns = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
+          <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1} isReadyButton = {true} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
+     </Container>
       );
 	}
 }

@@ -53,9 +53,6 @@ export default class LiScannerMenu extends Component {
                 {}
             ]
 		};
-
-		this._onPress = this._onPress.bind(this);
-		this.growAnimated = new Animated.Value(0);
 	}
 
 	Gotomenu  = (item) => {
@@ -65,34 +62,8 @@ export default class LiScannerMenu extends Component {
 		else{Alert.alert(item);}
 		}
 
-	_onPress() {
-		if (this.state.isLoading) return;
-
-		this.setState({ isLoading: true });
-
-		Animated.timing(
-			this.growAnimated,
-			{
-				toValue: 1,
-				duration: 100,
-				easing: Easing.linear,
-			}
-		).start();
-
-		setTimeout(() => {
-			// Actions.pop();
-			Actions.Scan_menu()
-		}, 200);
-	}
-
 
 	render() {
-
-		const changeScale = this.growAnimated.interpolate({
-			inputRange: [0, 1],
-			outputRange: [1, 40],
-		});
-
 		return (
 		<Container>
             <FlatList

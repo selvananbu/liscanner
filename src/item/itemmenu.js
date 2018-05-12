@@ -27,7 +27,11 @@ import ScanExample from '../nativeconnector/scanconnector';
 
 import LiFlatList from './liflatlist';
 
-export default class Item_menu extends Component {
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as Action from '../liaction/index';
+
+  class ItemMenu extends Component {
 
 	constructor(props) {
 		super(props);
@@ -36,23 +40,23 @@ export default class Item_menu extends Component {
 			isLoading: false,
 			GridViewItems: [
 				{
-					key:0,
+					key:'0',
 				text: ' ITEM\n READY',
 					MenuIcon_url:'src_image_item_ready'
 				},
 				{
-					key:1,
+					key:'1',
 				text: '  ITEM\n READY/QTY',
 				MenuIcon_url:'src_image_item_ready_qty'
 				},
 
 				{
-					key:2,
+					key:'2',
 				text: ' ITEM\n BROKEN',
 				MenuIcon_url:'src_image_item_broken'
 				},
 				{
-					key:3,
+					key:'3',
 				text: ' ITEM\n RELOAD',
 				MenuIcon_url:'src_image_item_reload'
 				},
@@ -81,7 +85,7 @@ export default class Item_menu extends Component {
 			}
 			else if(item.text === " ITEM\n RELOAD")
 			 {
-				 Actions.ItemReady({title:'LiScanner - Item - Reload'})
+				 Actions.ItemReload({title:'LiScanner - Item - Reload'})
 		   }
 		else{
 			Alert.alert(item.text);
@@ -90,41 +94,42 @@ export default class Item_menu extends Component {
 
 	_onPress() {
 		if (this.state.isLoading) return;
-
 		this.setState({ isLoading: true });
+	}
 
-		Animated.timing(
-			this.growAnimated,
-			{
-				toValue: 1,
-				duration: 100,
-				easing: Easing.linear,
-			}
-		).start();
-
-		setTimeout(() => {
-			// Actions.pop();
-			Actions.ScanMenu()
-		}, 200);
+	componentDidMount(){
+			this.props.setRack(' ');
+			this.props.setBatch(' ');
 	}
 
 
 	render() {
 	 ScanExample.setTitle("Li.Scanner - Item");
-		const changeScale = this.growAnimated.interpolate({
-			inputRange: [0, 1],
-			outputRange: [1, 40],
-		});
-
-
-		return (
+   return (
 			<Container>
-					<LiFlatList Menu = {this.state.GridViewItems} columnCount = {2} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item)}/>
+					<LiFlatList Menu = {this.state.GridViewItems}  columns = {2} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item)}/>
 			</Container>
-
 		);
 	}
 }
+
+function mapStateToProps(state) {
+	return {
+		obj: state.ItemReady
+
+	};
+}
+
+function mapDispatchToProps(dispatch){
+	return bindActionCreators({
+		setRack: Action.setRack,
+		setBatch: Action.setBatch
+	},dispatch)
+}
+
+export default connect(
+	mapStateToProps, mapDispatchToProps
+)(ItemMenu);
 
 const styles = StyleSheet.create({
 

@@ -20,90 +20,146 @@ import { width, height, totalSize } from 'react-native-dimension';
 
 export default class LiFlatList extends Component {
 
-constructor(props){
-  super(props);
-}
+	constructor(props){
+		super(props);
+	}
 
 
-  render() {
-    console.log("@@@",this.props.Menu);
-    return (
-            <FlatList
-                      data={ this.props.Menu }
-                      renderItem={({item}) =>{
-                        if(this.props.columnCount == 1){
-                          return (
-            <View style={styles.GridViewBlockStyleFor2}>
-              <TouchableOpacity style={{height:120,width:260,alignItems: 'center', justifyContent: 'center',}} onPress={this.props.Gotomenu(item)}>
-                <Text style={styles.GridViewInsideTextItemStyle} > {item.text}  </Text>
-                <Image
-                  source={{uri: item.sourceImage}}
-                  style={styles.ImageIconStyle2}
-                />
-              </TouchableOpacity>
-                          </View>
+	render() {
+		var newHeight = 0;
+		newHeight = height(this.props.height);
 
-                        );
-                  }
-                  else {
-                    return(
-                    <View style={styles.GridViewBlockStyle}>
-                      <TouchableOpacity style={{height:120,width:260,alignItems: 'center', justifyContent: 'center',}} onPress={this.props.Gotomenu(item)}>
-                        <Text style={styles.GridViewInsideTextItemStyle} > {item.text}  </Text>
-                        <Image
-                          source={{uri: item.sourceImage}}
-                          style={styles.ImageIconStyle2}
-                        />
-                      </TouchableOpacity>
-                                  </View>
+		var styles1 = styles.GridViewBlockStyle;
+		var stylesText1 = styles.GridViewInsideTextItemStyle;
+		var styleImage = styles.ImageIconStyle;
 
-                                );
-                  }
+		if(this.props.columns == 1){
+			if(this.props.isReadyButton && this.props.isReadyQty){
+				styles1 = styles.GridViewBlockStyleReadyQtyButton;
+				stylesText1 = styles.GridViewInsideTextItemStyleReadyButton;
+				styleImage = styles.ImageIconStyleReady;
+			}
 
-                }
-                                  }
-                      numColumns={this.props.columnCount}
-                  />
-    );
-  }
+			else if(this.props.isReadyButton){
+				styles1 = styles.GridViewBlockStyleReadyButton;
+				stylesText1 = styles.GridViewInsideTextItemStyleReadyButton;
+				styleImage = styles.ImageIconStyleReady;
+			}
+			else if(this.props.isReadyQty){
+				styles1 = styles.GridViewBlockStyleReadyQty;
+				stylesText1 = styles.GridViewInsideTextItemStyle;
+				styleImage = styles.ImageIconStyleReady;
+			}
+			else {
+				styles1 = styles.GridViewBlockStyleReady;
+				stylesText1 = styles.GridViewInsideTextItemStyle;
+				styleImage = styles.ImageIconStyleReady;
+			}
+		}
+		return (
+
+			<FlatList
+				data={ this.props.Menu }
+				renderItem={({item}) =>{
+					return (
+						<View style={styles1}>
+							<TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center'}} onPress={this.props.Gotomenu(item)}>
+								<Text style={stylesText1}  onPress={this.props.Gotomenu(item)} > {item.text}  </Text>
+									<Text style={styles.GridViewInsideTextItemStyle} >
+										{item.text === 'RACK' ? this.props.rackcode : this.props.itemcode}
+									</Text>
+								<Image
+									source={{uri:item.MenuIcon_url}}
+									style={styles.ImageIconStyle}
+									/>
+							</TouchableOpacity>
+						</View>
+					);
+				}}
+				numColumns={this.props.columns}
+				/>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-
 	GridViewBlockStyle: {
 		borderColor:'#881b4c',
 		justifyContent: 'center',
 		flex:1,
 		alignItems: 'center',
-		height: height(42),
+		height: height(41.5),
 		margin: 6,
 		backgroundColor: 'rgba(89,89,89,0.5)',
-	  },
-    GridViewBlockStyleFor2: {
+	},
+	GridViewBlockStyleReadyQty: {
 		borderColor:'#881b4c',
 		justifyContent: 'center',
 		flex:1,
 		alignItems: 'center',
 		height: height(20),
 		margin: 6,
-		 backgroundColor: 'rgba(89,89,89,0.5)',
+		backgroundColor: 'rgba(89,89,89,0.5)',
 
-   },
-	  GridViewInsideTextItemStyle: {
-		 color: '#881b4c',
-		 padding: 10,
-		 fontSize: 26,
-		 fontWeight: 'bold',
-		 fontFamily: 'roboto',
-		 justifyContent: 'center',
-	   },
-	   ImageIconStyle: {
-		padding: 10,
-		margin: 5,
-		height: 75,
-		width: 75,
+	},
+	GridViewBlockStyleReady: {
+		borderColor:'#881b4c',
+		justifyContent: 'center',
+		flex:1,
+		alignItems: 'center',
+		height: height(25),
+		margin: 6,
+		backgroundColor: 'rgba(89,89,89,0.5)',
+	},
+	GridViewBlockStyleReadyButton: {
+		borderColor:'#881b4c',
+		borderWidth:2,
+		justifyContent: 'center',
+		flex:1,
+		alignItems: 'center',
+		height: height(10),
+		marginTop: 150,
+		margin: 2,
+		backgroundColor: 'rgba(0, 150, 50,0.6)',
+	},
+	GridViewBlockStyleReadyQtyButton: {
+		borderColor:'#881b4c',
+		borderWidth:2,
+		justifyContent: 'center',
+		flex:1,
+		alignItems: 'center',
+		height: height(10),
+		marginTop: 40,
+		margin: 2,
+		backgroundColor: 'rgba(0, 150, 50,0.6)',
+	},
+	GridViewInsideTextItemStyleReadyButton: {
+		color: '#881b4c',
+		padding: 1,
+		fontSize: 26,
+		fontWeight: 'bold',
+		fontFamily: 'roboto',
+		justifyContent: 'center',
+	},
+
+	GridViewInsideTextItemStyle: {
+		color: '#881b4c',
+		padding: 5,
+		fontSize: 18,
+		fontWeight: 'bold',
+		fontFamily: 'roboto',
+		justifyContent: 'center',
+	},
+	ImageIconStyle: {
+		height: 60,
+		width: 60,
 		resizeMode : 'stretch',
+	},
+	ImageIconStyleReady: {
+		height: 30,
+		width: 30,
+		resizeMode : 'stretch',
+	},
 
-	 },
 
 });

@@ -19,9 +19,13 @@ import ScanExample from '../nativeconnector/scanconnector';
 import item from '../image/item.png';
 import rack from '../image/rack.png';
 
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-export default class ItemReady extends Component {
+import LiFlatList from './liflatlist';
 
+
+class Itemready extends Component {
 	constructor(props) {
 		super(props);
 
@@ -30,103 +34,80 @@ export default class ItemReady extends Component {
 			GridViewItems: [
 				{
 					key:'0',
-				text: 'Rack',
-					MenuIcon_url:'src_image_rack'
-				},
-				{
+					  text: 'RACK',
+					  MenuIcon_url:'src_image_rack'
+					  },
+					  {
 					key:'1',
-				text: 'Item',
-				MenuIcon_url:'src_image_item'
-				},
+					  text: 'ITEM',
+					  MenuIcon_url:'src_image_item'
+					  }
 			  ],
 
 			GridViewSubmitItems: [
-				{key: 'READY',
+				{
+					key:'0',
+					text: 'READY',
 				},
 			  ],
 		};
 	}
 
 	Gotomenu  = (item) => {
-		if (item=== '2')
-			{
+		if (item.key=== '2')
+		{
 			ScanExample.startOrderApp(this.props.rack,this.props.item);
-			}
-		else if(item == '0'){
-			 ScanExample.startScan('RACK',this.props.barcode);
 		}
-		else if(item == '1'){
-			 ScanExample.startScan('ITEM ',this.props.barcode.orderNo.toString());
+		else if(item.key == '0'){
+			 ScanExample.startScan('RACK');
+		}
+		else if(item.key == '1'){
+			 ScanExample.startScan('ITEM');
 		}
 	}
 
+	componentWillReceiveProps(nextProps){
+
+	}
+
+
 
 	render() {
-
-		if(this.props.title !== null)
- 					ScanExample.setTitle(this.props.title);
+		ScanExample.setTitle("Li.Scanner - Item - Ready");
 
 		var isQtyReadyScreen = false;
+		var result = '', res = '';
+		if(Object.keys(this.props.obj.batch) !== 0){
+			res = this.props.obj.batch.BATCH;
+		}
+		if(Object.keys(this.props.obj.rackId) !== 0){
+			result = this.props.obj.rackId.RACK;
+		}
 
-
+		console.log('resulttttt',result)
 		return (
-
 		<Container>
-				<FlatList
-					data={ this.state.GridViewItems }
-					renderItem={({item}) =>{
-
-						var isRack = false;
-						var barcode = "";
-						if(this.props.barcode != null)
-							barcode = this.props.barcode.orderNo;
-						if(item.key == "RACK" && this.props.barcode != null)
-								isRack = true;
-
-                        return (
-								<View style={styles.GridViewBlockStyle}>
-                                    <TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center',}}onPress={this.Gotomenu.bind(this, item.key)}>
-                                    <Text style={styles.GridViewInsideTextItemStyle}  onPress={this.Gotomenu.bind(this,item.key)} > {item.text}  </Text>
-
-
-										<Text style={styles.GridViewInsideTextItemStyle} >
-											{isRack ? barcode : this.props.rackId }
-										</Text>
-										<Image
-										source={{uri:item.MenuIcon_url}}
-										style={styles.ImageIconStyle}
-										/>
-                                    </TouchableOpacity>
-
-                                </View>
-															);
-											}
-								}
-					 numColumns={1}
-				/>
-        <View>
-              <FlatList
-                        data={ this.state.GridViewSubmitItems }
-                        renderItem={({item}) =>{
-                            return (
-							<View style={styles.GridViewBlockStyle2}>
-								<TouchableOpacity style={{height:120,width:260,alignItems: 'center', justifyContent: 'center',}}onPress={this.Gotomenu.bind(this, item.key)}>
-									<Text style={styles.GridViewInsideTextItemStyle2}  onPress={this.Gotomenu.bind(this,item.key)} > {item.key}  </Text>
-									<Image
-										source={{uri: item.MenuIcon_url}}
-										style={styles.ImageIconStyle2}
-									/>
-								</TouchableOpacity>
-                            </View>);
-                                                }
-                                    }
-                        numColumns={1}
-                    />
-                </View>
+			<LiFlatList Menu = {this.state.GridViewItems} columns = {1} rackcode={result} itemcode={res} Gotomenu={(item)=> this.Gotomenu.bind(this,item)}/>
+      <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1} isReadyButton = {true} Gotomenu={(item)=> this.Gotomenu.bind(this,item)}/>
 		</Container>
 		);
 	}
 }
+
+function mapStateToProps(state) {
+	return {
+		obj: state.ItemReady
+
+	};
+}
+
+export default connect(
+	mapStateToProps
+)(Itemready);
+
+
+
+
 
 const styles = StyleSheet.create({
 
@@ -137,7 +118,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		height: height(25),
 		margin: 6,
-		 backgroundColor: 'rgba(89,89,89,0.5)',
+		backgroundColor: 'rgba(89,89,89,0.5)',
 
       },
       GridViewBlockStyle2: {
@@ -152,12 +133,12 @@ const styles = StyleSheet.create({
 
 	  },
 	  GridViewInsideTextItemStyle: {
-		 color: '#881b4c',
-		 padding: 5,
-		 fontSize: 18,
-		 fontWeight: 'bold',
-		 fontFamily: 'roboto',
-		 justifyContent: 'center',
+		color: '#881b4c',
+		padding: 5,
+		fontSize: 18,
+		fontWeight: 'bold',
+		fontFamily: 'roboto',
+		justifyContent: 'center',
 	   },
 	   GridViewInsideTextItemStyle2: {
 		color: '#881b4c',

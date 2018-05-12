@@ -10,7 +10,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { TextButton, RaisedTextButton } from 'react-native-material-buttons';
-import MenuExample from './src/nativeconnector/scanconnector';
+import MenuExample from './src/nativeconnector/menuconnector';
 
 export default class Welcome extends Component {
 

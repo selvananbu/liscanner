@@ -40,12 +40,9 @@ public class ScanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    void startScan(String key,String value){
+    void startScan(String key){
         Intent scanActivity = new Intent(getCurrentActivity(), ScanActivity.class);
         scanActivity.putExtra("key",key);
-        scanActivity.putExtra("isScan",true);
-        if(value != null)
-            scanActivity.putExtra("value",value);
         ScanActivity.menuContext = mreactContext;
         getCurrentActivity().startActivity(scanActivity);
 

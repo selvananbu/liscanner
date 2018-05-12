@@ -42,8 +42,7 @@ public class ScanActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean vibrate = myPrefs.getBoolean("notification_Scanner_vibrate",true);
+
 
 //                IntentIntegrator integrator = new IntentIntegrator(this);
 //        integrator.setPrompt("Scan a barcode");
@@ -67,29 +66,36 @@ public class ScanActivity extends AppCompatActivity {
 //            }
 //        }
 
-        WritableMap params = Arguments.createMap();
-        params.putString("key",mkey);
-        Intent scanIntent = getIntent();
-        if(scanIntent != null && scanIntent.hasExtra("value")) {
-            String value = scanIntent.getExtras().get("value").toString();
-            if (value != null) {
-                params.putString("rackId",value);
-            }
-        }
+        // WritableMap params = Arguments.createMap();
+        // params.putString("key",mkey);
+        // Intent scanIntent = getIntent();
+        // if(scanIntent != null && scanIntent.hasExtra("value")) {
+        //     String value = scanIntent.getExtras().get("value").toString();
+        //     if (value != null) {
+        //         params.putString("rackId",value);
+        //     }
+        // }
+        //
+        // params.putString("result","708080");
+        // getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        //         .emit("showResult",params);
+        // finish();
 
-        params.putString("result","708080");
-        getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("showResult",params);
-        finish();
 
+       SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+       boolean vibrate = myPrefs.getBoolean("notification_Scanner_vibrate",true);
 
-//        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//        boolean vibrate = myPrefs.getBoolean("notification_Scanner_vibrate",true);
-//
-//        IntentIntegrator integrator = new IntentIntegrator(this);
-//        integrator.setPrompt("Scan a barcode");
-//        if(vibrate)
-//            integrator.setBeepEnabled(false);
+       IntentIntegrator integrator = new IntentIntegrator(this);
+       integrator.setPrompt("Scan a barcode");
+       if(vibrate)
+           integrator.setBeepEnabled(false);
+                  Intent scanIntent = getIntent();
+                  if(scanIntent != null && scanIntent.hasExtra("key")){
+                          String key = scanIntent.getExtras().get("key").toString();
+                          if(key != null){
+                              mkey = key;
+                          }
+                        }
 //
 //        Intent scanIntent = getIntent();
 //        if(scanIntent.hasExtra("isScan") && scanIntent.getExtras().get("isScan").toString() == "true"){
@@ -103,7 +109,7 @@ public class ScanActivity extends AppCompatActivity {
 //                            mvalue = value;
 //                        }
 //                    }
-//                    integrator.initiateScan();
+                   integrator.initiateScan();
 //                }
 //            }
 //        }
@@ -175,11 +181,9 @@ public class ScanActivity extends AppCompatActivity {
 
             } else {
                         WritableMap params = Arguments.createMap();
-                        params.putString("key",mkey);
-//                        if(mvalue != null && !mvalue.isEmpty()){
-//                            params.putString("value",mvalue);
-//                        }
+
                         params.putString("result",result.getContents().toString());
+                        params.putString("key",mkey);
                         getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                                 .emit("showResult",params);
                 }
