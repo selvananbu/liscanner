@@ -10,6 +10,14 @@ export const setRack = (value) => {
     type: "SET_BATCH",
     payload: value
     }
-    }; 
+    };
+
+export  const setItem  =  (value)  =>  {
+    return {
+        type:  "SET_ITEM",
+        payload:  value
+    }
+};
+     
      
     

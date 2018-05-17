@@ -19,6 +19,7 @@ import commission from './image/commission.png';
 import utilities from './image/utilities.png';
 
 import ScanExample from './nativeconnector/scanconnector';
+import MenuExample from './nativeconnector/menuconnector';
 
 const SIZE = window.width;
 
@@ -58,9 +59,20 @@ export default class LiScannerMenu extends Component {
 	Gotomenu  = (item) => {
 		console.log(item);
 		if (item==="ITEM")
-			{ Actions.ItemMenu() }
-		else{Alert.alert(item);}
+		{ 
+				Actions.ItemMenu() 
 		}
+		else if (item === "UTILITIES")
+		 { 
+			 Actions.Utilities()
+		 }
+		else if (item === "COMMISSION") {
+			Actions.Commission()
+		}
+		else if (item === "RACK") {
+			Actions.RackMenu()
+		}
+	}
 
 
 	render() {

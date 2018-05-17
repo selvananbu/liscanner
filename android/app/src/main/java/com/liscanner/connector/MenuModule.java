@@ -6,11 +6,19 @@ import android.content.Intent;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.liscanner.MainActivity;
+import com.reactlibrary.view.ListConnectionActivity;
 import com.reactlibrary.view.NewConnectionActivity;
+
+import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
+import static com.liscanner.MainActivity.menuString;
+import static com.reactlibrary.util.FileUtil.isFileExistInDevice;
+import static com.reactlibrary.view.ListConnectionActivity.versionList;
 
 public class MenuModule extends ReactContextBaseJavaModule {
 
     ReactApplicationContext mreactContext;
+    public static boolean isAlreadyCalled = false;
 
     public MenuModule(ReactApplicationContext reactContext, Context context) {
         super(reactContext);
@@ -27,29 +35,35 @@ public class MenuModule extends ReactContextBaseJavaModule {
         getCurrentActivity().onBackPressed();
     }
 
-// @ReactMethod
-//    public void show(String message) {
-//     if(isAlreadyCalled) return;
-//     String[] menuList = message.split(",");
-//     for (String menu:menuList) {
-//         menuString.add(menu);
-//     }
-//     final MainActivity activity = (MainActivity) getCurrentActivity();
-//     if(activity != null){
-//         runOnUiThread(new Runnable() {
-//             @Override
-//             public void run() {
-//
-//                 activity.initializeDynamicMenu();
-//                 activity.setMenuContext(mreactContext);
-//             }
-//         });
-//     }
-//    }
+@ReactMethod
+   public void show(String message) {
+    String[] menuList = message.split(",");
+    for (String menu:menuList) {
+        menuString.add(menu);
+    }
+    final MainActivity activity = (MainActivity) getCurrentActivity();
+    if(activity != null){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                activity.initializeDynamicMenu();
+                activity.setMenuContext(mreactContext);
+            }
+        });
+    }
+   }
 
     @ReactMethod
     public void startConnectionActivity(){
-        Intent newconnectionIntent = new Intent(getCurrentActivity(), NewConnectionActivity.class);
-        getCurrentActivity().startActivityForResult(newconnectionIntent, 2);
+        if(mreactContext != null && !isFileExistInDevice(mreactContext)){
+            Intent newconnectionIntent = new Intent(getCurrentActivity(), NewConnectionActivity.class);
+            getCurrentActivity().startActivityForResult(newconnectionIntent, 2);
+        }
+        else{
+            Intent listconnectionIntent = new Intent(getCurrentActivity(), ListConnectionActivity.class);
+            getCurrentActivity().startActivityForResult(listconnectionIntent, 2);
+        }
+
     }
 }

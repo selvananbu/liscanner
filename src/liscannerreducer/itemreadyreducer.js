@@ -1,6 +1,7 @@
 const initial = {
     rackId: {},
     batch: {},
+    item:{}
 }
 
 export default function(state= initial,action){
@@ -16,6 +17,12 @@ export default function(state= initial,action){
     batch: { ['BATCH'] : action.payload},
     }
     break;
+        case  "SET_ITEM":
+            state  =  {
+                ...state,
+                item: { ['ITEM']:  action.payload },
+            }
+            break;
 
     }
 return state;

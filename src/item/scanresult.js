@@ -37,6 +37,7 @@ import {
     }
 
     alertItemName = (item) => {
+      this.props.setItem(item);
       if(this.props.barcode !== null)
       Actions.ItemReady();
       else
@@ -47,10 +48,11 @@ import {
       if(responseData !== null && responseData.state.response.data !== undefined  && Object.keys(responseData.state.response.data).length !== 0){
         this.setState({result:responseData.state.response.data});
         this.setState({isDataAvailable:true});
+
       }
       else{
         ScanExample.startVibrate();
-        Actions.Item_ready();
+        Actions.ItemReady();
       }
     }
 
@@ -60,18 +62,18 @@ import {
           if(this.props.keyId === 'RACK')
             isRack = true;
       }
-      console.log("@@@",isRack);
-      console.log("^^^^",this.props.result);
 
       if(this.props.result !== null){
-        if(isRack)
-         this.props.setRack(this.props.result)
-        else
-          this.props.setBatch(this.props.result)
-          
+        if(isRack){
+          this.props.setRack(this.props.result);
           Actions.ItemReady();
+        }
+        else{
+          this.props.setBatch(this.props.result);
 
-         // obj.GET_todo_lists(this.callbackWithArg.bind(this),null,null,this.props.result);
+          obj.GET_todo_lists(this.callbackWithArg.bind(this), null, null, this.props.result);
+        }
+        
       }
     }
 
@@ -98,6 +100,7 @@ import {
             <FlatList
               data={this.state.result.item}
               ItemSeparatorComponent={this.renderSeparator}
+              keyExtractor={(item, index) => index}
               renderItem={({item , separators}) => (
                 <TouchableOpacity
                   onPress={() => this.alertItemName(item)}>
@@ -105,10 +108,22 @@ import {
                   <Text style={styles.orderno}>Order No: {item.orderNo}</Text>
                   <Text style={styles.pane}>Batch No: {item.batchNo}                              Pane No: {item.pane}</Text>
                   <Text style={styles.pane}>Batch Seq: {item.batchSeq}                                       Comp: {item.comp}</Text>
+                  
+                    {item.part.map((value, elem) => {
+                      { console.log("!@@@@@", value.partBcd) };
+                      return (
+                        <View>
+                        <Text style={styles.pane}>Part Count: {value.partCnt}                                       Slot: {value.slot}</Text>
+                        <Text style={styles.pane}>Physical Rack: {value.physRack}             Barcode: {value.partBcd}</Text>
+                        <Text>  Status: {value.prodStatus}</Text>
+                        
+                        </View>
+                    );
+                    })}
+
                 </View>
               </TouchableOpacity>
               )}
-              keyExtractor={item => item.paneNo}
               />
           </View>
 
@@ -142,7 +157,8 @@ import {
   function mapDispatchToProps(dispatch){
     return bindActionCreators({
       setRack: Action.setRack,
-      setBatch: Action.setBatch
+      setBatch: Action.setBatch,
+      setItem:  Action.setItem
     },dispatch)
   }
 

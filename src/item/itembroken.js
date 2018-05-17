@@ -55,19 +55,18 @@ export default class ItemBroken extends Component {
 
   }
 	onButtonClicked  = (item) => {
-        if(item.key !=='3')
-                ScanExample.startScan(item.key,this.props.barcode);
-        else {
-                //Start Ready Messgae
-        }
+        
 		}
+    onReadyPressed = (item) => {
+
+    }
 	render() {
 	 ScanExample.setTitle("Li.Scanner - Item  - Broken");
 
 		return (
       <Container>
           <LiFlatList Menu = {this.state.GridViewItems} columns = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
-          <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1} isReadyButton = {true} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
+          <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1} isReadyButton = {true}  Gotomenu={(item)=> this.onReadyPressed.bind(this,item)}/>
      </Container>
       );
 	}

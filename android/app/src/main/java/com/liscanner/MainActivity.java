@@ -16,136 +16,47 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.liscanner.connector.MenuModule;
 import com.reactlibrary.JSBundleManager;
 import com.reactlibrary.JSBundleManagerActivity;
 import com.reactlibrary.model.Connection;
+import com.reactlibrary.util.FileUtil;
+import com.reactlibrary.view.ListConnectionActivity;
+import com.reactlibrary.view.NewConnectionActivity;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static com.reactlibrary.util.FileUtil.isFileExistInDevice;
+import static com.reactlibrary.util.FileUtil.retrieveConnectionListFromFile;
 import static com.reactlibrary.view.ListConnectionActivity.versionList;
-
-//public class MainActivity extends JSBundleManagerActivity implements  JSBundleManager.Interface  , DefaultHardwareBackBtnHandler, NavigationView.OnNavigationItemSelectedListener {
-//
-//    private ReactInstanceManager mReactInstanceManager;
-//    private HelloFragment mViewFragment;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        mReactInstanceManager =
-//                ((MainApplication) getApplication()).getReactNativeHost().getReactInstanceManager();
-//
-//        mViewFragment = new HelloFragment();
-//
-//        if (mViewFragment != null) {
-//            mViewFragment.setMainApplication((ReactApplication) getApplication());
-//            mViewFragment.setmReactInstanceManager(mReactInstanceManager);
-//            getSupportFragmentManager().beginTransaction().add(R.id.container, mViewFragment).commit();
-//        }
-//
-//
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-//    }
-//
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (mReactInstanceManager != null) {
-//            mReactInstanceManager.onHostPause();
-//        }
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
-//
-//    @Override
-//    public void invokeDefaultOnBackPressed() {
-//
-//    }
-//
-//    @Override
-//    protected void refreshFragment() {
-//
-//    }
-//}
 
 public class MainActivity extends JSBundleManagerActivity implements  JSBundleManager.Interface  , DefaultHardwareBackBtnHandler, NavigationView.OnNavigationItemSelectedListener {
 
 
     private HelloFragment mViewFragment;
     private ReactInstanceManager mReactInstanceManager;
+    public static ArrayList<String> menuString = new ArrayList<>();
+    ReactApplicationContext menuContext;
+
+    public void setMenuContext(ReactApplicationContext menuContext) {
+        this.menuContext = menuContext;
+    }
+
+    public ReactApplicationContext getMenuContext() {
+        return menuContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +79,7 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
         }
         getSupportFragmentManager().beginTransaction().add(R.id.container, mViewFragment).commit();
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -179,23 +90,71 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
     }
 
 
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+        int id = menuItem.getItemId();
+        if(menuItem.getTitle().toString().equals("Bundle")){
+            if(versionList.size() <= 0){
+                if(!isFileExistInDevice(this)){
+                    Intent newconnectionIntent = new Intent(this, NewConnectionActivity.class);
+                    startActivityForResult(newconnectionIntent, 2);
+                    return true;
+                }
+            }
+                Intent listactivity = new Intent(this, ListConnectionActivity.class);
+                startActivityForResult(listactivity, 2);
+        }
+        if (getMenuContext() == null) return false;
+        if(menuItem.getTitle().toString().equals("Item")){
+            WritableMap params = Arguments.createMap();
+            getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("showItem",params);
+        }
+        else if(menuItem.getTitle().toString().equals("Rack")){
+            WritableMap params = Arguments.createMap();
+            getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("showRack",params);
+        }
+        else if(menuItem.getTitle().toString().equals("Commision")){
+            WritableMap params = Arguments.createMap();
+            getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("showCommission",params);
+        }
+        else if(menuItem.getTitle().toString().equals("Utilitie.3s")){
+            WritableMap params = Arguments.createMap();
+            getMenuContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("showUtilities",params);
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
     public void invokeDefaultOnBackPressed() {
         super.onBackPressed();
-
-//        isHomeScreen();
-
     }
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         isHomeScreen();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(!versionList.isEmpty()){
+            try {
+                FileUtil.addConnectIonListToFile(getBaseContext(),versionList);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     @Override
@@ -239,15 +198,25 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this,this);
             }
-        }
+
+    }
 
     public boolean isHomeScreen() {
 
-        WritableMap params = Arguments.createMap();
-        mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("onBackPressed",params);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
 
-        return false;
+        else {
+
+            WritableMap params = Arguments.createMap();
+            mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("onBackPressed",params);
+
+            return false;
+        }
     }
 
     @Override
@@ -272,5 +241,26 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
                 }
             }
         }
+    }
+    public void initializeDynamicMenu() {
+        if(!menuString.isEmpty()){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+            MenuItem myMoveGroupItem = navigationView.getMenu().findItem(R.id.dynamic);
+            SubMenu subMenu = myMoveGroupItem.getSubMenu();
+            subMenu.clear();
+
+            int itmId = 1;
+            int j = 0;
+            for (String itmText: menuString) {
+                if(j==0) {
+                    j++;
+                    continue;                                  //to skip header
+                }
+                subMenu.add(myMoveGroupItem.getGroupId(),itmId,myMoveGroupItem.getOrder(),itmText);
+            }
+            MenuModule.isAlreadyCalled = true;
+        }
+        menuString.clear();
     }
 }

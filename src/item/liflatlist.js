@@ -24,6 +24,14 @@ export default class LiFlatList extends Component {
 		super(props);
 	}
 
+	componentWillReceiveProps(nextProps){
+		if (nextProps.rackcode !== undefined || nextProps.rackcode !== ''){
+			console.log(nextProps.rackcode,'+++++');
+			this.forceUpdate();
+		}
+	}
+
+
 
 	render() {
 		var newHeight = 0;
@@ -32,6 +40,8 @@ export default class LiFlatList extends Component {
 		var styles1 = styles.GridViewBlockStyle;
 		var stylesText1 = styles.GridViewInsideTextItemStyle;
 		var styleImage = styles.ImageIconStyle;
+		var abc = this.props.rackcode;
+		console.log("flat List", this.props.rackcode);
 
 		if(this.props.columns == 1){
 			if(this.props.isReadyButton && this.props.isReadyQty){
@@ -56,17 +66,20 @@ export default class LiFlatList extends Component {
 				styleImage = styles.ImageIconStyleReady;
 			}
 		}
+		console.log('in');
 		return (
 
 			<FlatList
 				data={ this.props.Menu }
 				renderItem={({item}) =>{
+					console.log(item, this.props.rackcode);
 					return (
 						<View style={styles1}>
 							<TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center'}} onPress={this.props.Gotomenu(item)}>
 								<Text style={stylesText1}  onPress={this.props.Gotomenu(item)} > {item.text}  </Text>
 									<Text style={styles.GridViewInsideTextItemStyle} >
-										{item.text === 'RACK' ? this.props.rackcode : this.props.itemcode}
+										 
+									{item.text === 'RACK' ? this.props.rackcode : this.props.itemcode}
 									</Text>
 								<Image
 									source={{uri:item.MenuIcon_url}}
@@ -114,13 +127,17 @@ const styles = StyleSheet.create({
 	GridViewBlockStyleReadyButton: {
 		borderColor:'#881b4c',
 		borderWidth:2,
-		justifyContent: 'center',
-		flex:1,
-		alignItems: 'center',
-		height: height(10),
-		marginTop: 150,
-		margin: 2,
-		backgroundColor: 'rgba(0, 150, 50,0.6)',
+	justifyContent: 'center',
+	flexDirection:'row',
+	flex:1,
+	alignItems: 'center',
+	height: height(10),
+	paddingBottom:0,
+	marginBottom:0,
+	margin:2,
+	padding:2,
+	marginTop:75,
+	backgroundColor: 'rgba(0, 150, 50,0.6)',
 	},
 	GridViewBlockStyleReadyQtyButton: {
 		borderColor:'#881b4c',

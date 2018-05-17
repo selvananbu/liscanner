@@ -68,9 +68,6 @@ import * as Action from '../liaction/index';
 	}
 
 	Gotomainmenu  = (item) => {
-		console.log("###",item);
-		console.log("###",item.text);
-
 		if (item.text===" ITEM\n READY")
 		{
 				Actions.ItemReady({title:'LiScanner - Item - Ready'})
@@ -86,9 +83,9 @@ import * as Action from '../liaction/index';
 			else if(item.text === " ITEM\n RELOAD")
 			 {
 				 Actions.ItemReload({title:'LiScanner - Item - Reload'})
-		   }
+		  }
 		else{
-			Alert.alert(item.text);
+			Alert.alert("Not found");
 		}
 		}
 

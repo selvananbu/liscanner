@@ -26,10 +26,19 @@ import ItemReadyQuantity from './src/item/itemreadyquantity'
 import ItemBroken from './src/item/itembroken'
 import ItemReload from './src/item/itemreload'
 import ScanResult from "./src/item/scanresult"
+import OrderPage from "./src/item/orderlisttest.js"
+import Utilities from "./src/utilities/utilities.js"
+import Commission from "./src/commission/commissionmenu.js"
+import RackMenu from "./src/rack/rackmenu.js"
+
+
+import LiListView from "./src/item/liflatlist.js"
 
 import Welcome from "./welcomescreen"
 
 import ScanExample from './src/nativeconnector/scanconnector';
+import MenuExample from './src/nativeconnector/menuconnector';
+
 
 
 import allReducers from './src/liscannerreducer/index';
@@ -44,18 +53,40 @@ export default class App extends Component<Props> {
 
   componentWillMount() {
     DeviceEventEmitter.addListener('showResult', function (e: Event) {
+      if(e.key === "RACK"){
+        Actions.ItemReady({result:e.result});
+      }
+      else{
+        Actions.ScanResult({ keyId: e.key, result: e.result });
+      }
+    });
 
-       Actions.ScanResult({keyId:e.key,result:e.result});
+    DeviceEventEmitter.addListener('showItem', function (e: Event) {
+      Actions.ItemMenu();
+    });
+    DeviceEventEmitter.addListener('showItemReady', function (e: Event) {
+      Actions.ItemReady();
+    });
+    DeviceEventEmitter.addListener('showRack', function (e: Event) {
+      // Actions.RackMenu();
+    });
+    DeviceEventEmitter.addListener('showCommission', function (e: Event) {
+      // Actions.CommissionMenu();
+    });
+    DeviceEventEmitter.addListener('showUtilities', function (e: Event) {
+      // Actions.UtilitiesMenu();
     });
 
     DeviceEventEmitter.addListener('onBackPressed', function (e: Event) {
       const scene = Actions.currentScene;
-
-      if (scene === 'LiScannerMenu') {
+      if(scene === null || scene === undefined){
+        return true;
+      }
+      if (scene === 'LiScannerMenu' || scene === 'Welcome') {
         BackHandler.exitApp();
         return true;
       }
-      if(scene == 'ItemMenu'){
+      if (scene == 'ItemMenu' ||  scene === 'Utilities' || scene === 'Commission' || scene === 'RackMenu'){
         ScanExample.setTitle("LiScanner");
         Actions.LiScannerMenu();
         return true;
@@ -69,6 +100,8 @@ export default class App extends Component<Props> {
       return true;
     });
 
+    // MenuExample.show("LiScanner,Item,Rack,Commision,Utilities");
+
   }
 
   componentWillUnmount() {
@@ -78,24 +111,15 @@ export default class App extends Component<Props> {
   constructor(props){
     super(props)
   }
-render() {
- return (
-   <Provider store={store}>
-<Router>
-<Scene key="root">
-<Scene key="LiScannerMenu" component={LiScannerMenu} animation='fade' hideNavBar={true} initial={true} />
-<Scene key="ItemMenu" component={ItemMenu} animation='fade' hideNavBar={true} initial={false}/>
-<Scene key="ItemReady" component={ItemReady} animation='fade' hideNavBar={true} initial={false}/>
-<Scene key="ScanResult" component={ScanResult} animation='fade' hideNavBar={true} initial={false}/>
-<Scene key="ItemReadyQuantity" component={ItemReadyQuantity} animation='fade' hideNavBar={true} initial={false}/>
-<Scene key="ItemBroken" component={ItemBroken} animation='fade' hideNavBar={true} initial={false}/>
-<Scene key="ItemReload" component={ItemReload} animation='fade' hideNavBar={true} initial={false}/>
-</Scene>
-</Router>
-</Provider>
-
+  render() {
+    return (
+      <Router>
+        <Scene key="root">
+          <Scene key="Welcome" component={Welcome} animation='fade' hideNavBar={true} initial={true} />
+      </Scene>
+    </Router>
   );
- }
+}
 }
 
 const styles = StyleSheet.create({

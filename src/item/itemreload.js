@@ -53,11 +53,11 @@ export default class ItemReload extends Component {
   }
 
   onButtonClicked  = (item) => {
-    if(item.key !== 3)
-    ScanExample.startScan(item.key,this.props.barcode);
-    else {
-      //Start Ready Messgae
-    }
+
+  }
+
+  onReadyPressed = (item) => {
+
   }
 
 
@@ -67,7 +67,7 @@ export default class ItemReload extends Component {
     return (
     <Container>
       <LiFlatList Menu = {this.state.GridViewItems} columns = {1}  columns = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
-      <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1}  isReadyButton = {true} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
+    <LiFlatList Menu = {this.state.GridViewSubmitItems} isReadyButton = {true} columns = {1} Gotomenu={(item)=> this.onReadyPressed.bind(this,item)} />
   </Container>
 
 );
