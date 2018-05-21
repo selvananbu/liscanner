@@ -8,6 +8,8 @@ import {
 	Animated,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
 import Grid from 'react-native-grid-component';
 import { ThemeProvider } from 'react-native-material-ui';
 import { Actions, ActionConst } from 'react-native-router-flux';
@@ -18,17 +20,14 @@ import item_ready from '../image/item_ready.png';
 import item_ready_qty from '../image/item_ready_qty.png';
 import item_broken from '../image/item_broken.png';
 import item_reload from '../image/item_reload.png';
-
 import itemImage from '../image/item.png';
 import rack from '../image/rack.png';
 import quantity from '../image/quantity.png';
 
+import LiScannerMenu from '../liscannermenu'
+
 import ScanExample from '../nativeconnector/scanconnector';
-
 import LiFlatList from './liflatlist';
-
-import { connect } from 'react-redux';
-import {bindActionCreators} from 'redux';
 import * as Action from '../liaction/index';
 
   class ItemMenu extends Component {
@@ -68,6 +67,9 @@ import * as Action from '../liaction/index';
 	}
 
 	Gotomainmenu  = (item) => {
+		console.log("###",item);
+		console.log("###",item.text);
+
 		if (item.text===" ITEM\n READY")
 		{
 				Actions.ItemReady({title:'LiScanner - Item - Ready'})
@@ -77,15 +79,15 @@ import * as Action from '../liaction/index';
 			Actions.ItemReadyQuantity({title:'LiScanner - Item - Ready/QTY'})
 		}
 		else if(item.text === " ITEM\n BROKEN")
-			{
-				Actions.ItemBroken({title:'LiScanner - Item - Broken'})
-			}
-			else if(item.text === " ITEM\n RELOAD")
-			 {
-				 Actions.ItemReload({title:'LiScanner - Item - Reload'})
-		  }
+		{
+			Actions.ItemBroken({title:'LiScanner - Item - Broken'})
+		}
+		else if(item.text === " ITEM\n RELOAD")
+		{
+			Actions.ItemReload({title:'LiScanner - Item - Reload'})
+		}
 		else{
-			Alert.alert("Not found");
+			Alert.alert(item.text);
 		}
 		}
 
@@ -120,7 +122,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		setRack: Action.setRack,
-		setBatch: Action.setBatch
+		setBatch: Action.setBatch,
+		setSoftKey: Action.setSoftKey
 	},dispatch)
 }
 

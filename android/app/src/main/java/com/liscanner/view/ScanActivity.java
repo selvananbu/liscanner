@@ -44,12 +44,14 @@ public class ScanActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
 
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-    boolean vibrate = myPrefs.getBoolean("notification_Scanner_vibrate",true);
+    boolean vibrate = myPrefs.getBoolean("notifications_new_message_vibrate",true);
 
     IntentIntegrator integrator = new IntentIntegrator(this);
     integrator.setPrompt("Scan a barcode");
+
     if(vibrate)
-    integrator.setBeepEnabled(false);
+        integrator.setBeepEnabled(false);
+
     Intent scanIntent = getIntent();
     if(scanIntent != null && scanIntent.hasExtra("key")){
       String key = scanIntent.getExtras().get("key").toString();

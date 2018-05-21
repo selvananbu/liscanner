@@ -54,3 +54,5 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+*.png
+android/app/src/main/liscanner_android_17.10/node_modules_reactnativeelements_src_rating_images_rocket.png

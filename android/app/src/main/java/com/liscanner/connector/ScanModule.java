@@ -3,15 +3,18 @@ package com.liscanner.connector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.liscanner.view.ScanActivity;
-import com.reactlibrary.JSBundleManager;
+import com.liscanner.view.settings.SettingsActivity;
+import com.liscanner.view.settings.SettingsActivity_test;
 
 import static android.R.attr.duration;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -49,6 +52,12 @@ public class ScanModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    void startSettings(){
+        Intent settingIntent = new Intent(getCurrentActivity(), SettingsActivity_test.class);
+        getCurrentActivity().startActivityForResult(settingIntent, 2);
+    }
+
+    @ReactMethod
     void startOrderApp(String rack,String item){
         Intent scanActivity = new Intent(getCurrentActivity(), ScanActivity.class);
         ScanActivity.menuContext = mreactContext;
@@ -81,6 +90,9 @@ public class ScanModule extends ReactContextBaseJavaModule {
     void startVibrate(){
         Toast toast = Toast.makeText(getReactApplicationContext(), "No Order Present for Scanned Barcode..", Toast.LENGTH_SHORT);
         toast.show();
+        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getReactApplicationContext());
+        boolean vibrate = myPrefs.getBoolean("notifications_new_message_vibrate",true);
+        if(!vibrate) return;
         if (Build.VERSION.SDK_INT >= 26) {
             ((Vibrator) getReactApplicationContext().getSystemService(VIBRATOR_SERVICE)).vibrate(200);          //@Need to check
         } else {

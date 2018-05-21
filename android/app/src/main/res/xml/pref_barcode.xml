@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:defaultValue=" "
+        android:key="blank_notification2"
+        android:title=" "/>
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_barcode_racklength"
+        android:key="rackbarcode_length"
+        android:inputType="number"
+        android:summary="@string/pref_Summary_racklength"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_barcode_racklength" />
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_barcode_itemlength"
+        android:summary="@string/pref_summary_itemlength"
+        android:inputType="number"
+        android:key="itembarcode_length"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_barcode_itemlength" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="soft_scan_key"
+        android:summary="@string/pref_description_soft_key_sumnmary"
+        android:paddingTop="@dimen/nav_header_height"
+        android:title="@string/pref_title_soft_key" />
+</PreferenceScreen>

@@ -57,86 +57,61 @@ export default class ItemReadyQuantity extends Component {
     };
   }
 
-  onButtonClicked  = (item) => {
-
-  
-  }
-  onReadyPressed = (item) => {
-
+  onActionButtonPressed  = (item) => {
+    // if(item.key !== 3)
+    // ScanExample.startScan(item.key,this.props.barcode);
+    // else {
+    //   //Start Ready Message
+    // }
   }
 
 
   render() {
     ScanExample.setTitle("Li.Scanner - Item - Ready/QTY");
-
     return (
-      <Container>
-        <LiFlatList Menu = {this.state.GridViewItems} isReadyQty = {true} columns = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
-      <LiFlatList Menu = {this.state.GridViewSubmitItems} columns = {1} isReadyQty = {true} isReadyButton = {true} Gotomenu={(item)=> this.onReadyPressed.bind(this,item)}/>
-  </Container>
-
+      <View style={{flex:1}}>
+        <LiFlatList Menu = {this.state.GridViewItems} isfinalScreen = {true} isReadyQty = {true} columns = {1} Gotomenu={(item)=> this.onActionButtonPressed.bind(this,item)}/>
+        <View style={{flexDirection:'row',alignContent:'space-around', justifyContent:'space-around'}}>
+         <TouchableOpacity style={styles.undoButton } onPress={this.onActionButtonPressed.bind(this, 'UNDO')}>
+         <Text style={styles.readyText}> UNDO  </Text>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.readyButton } onPress={this.onActionButtonPressed.bind(this, 'READY')}>
+          <Text style={styles.readyText}> READY  </Text>
+         </TouchableOpacity>
+       </View>
+    </View>
 );
 }
 }
-
 const styles = StyleSheet.create({
+  undoButton: {
+   height:height(8),
+   width:width(48),
+   backgroundColor:'#881b4c',
+   alignItems:'center',
+   justifyContent:'center',
+   marginBottom:2,
 
-  GridViewBlockStyle: {
-    borderColor:'#881b4c',
-    justifyContent: 'center',
-    flex:1,
-    alignItems: 'center',
-    height: height(20),
-    margin: 6,
-    backgroundColor: 'rgba(89,89,89,0.5)',
-
-  },
-  GridViewBlockStyle2: {
-    borderColor:'#881b4c',
-    borderWidth:2,
-    justifyContent: 'center',
-    flex:1,
-    alignItems: 'center',
-    height: height(10),
-    marginTop: 45,
-    margin: 2,
-    backgroundColor: 'rgba(0, 150, 50,0.6)',
-
-  },
-  GridViewInsideTextItemStyle: {
-    color: '#881b4c',
-    padding: 5,
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'roboto',
-    justifyContent: 'center',
-  },
-  GridViewInsideTextItemStyle2: {
-    color: '#881b4c',
-    padding: 1,
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontFamily: 'roboto',
-    justifyContent: 'center',
-  },
-  Heading: {
-    color: '#fff',
-    padding: 5,
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontFamily: 'roboto',
-    justifyContent: 'center',
-  },
-  ImageIconStyle: {
-    height: 60,
-    width: 60,
-    resizeMode : 'stretch',
-  },
-  ImageIconStyle2: {
-    height: 30,
-    width: 30,
-    resizeMode : 'stretch',
-  },
-
-
+   },
+  readyButton: {
+   height:height(8),
+   width:width(48),
+   backgroundColor:'rgba(0,125,50,0.8)',
+   alignItems:'center',
+   justifyContent:'center',
+   marginBottom:2,
+   },
+     readyText:{
+   color: '#fff',
+   fontSize: 20,
+   fontWeight: "bold"
+   }
 });
+
+/*  */
+
+/* <View style={{alignItems:'center'}}>
+<TouchableOpacity style={styles.readyButton} onPress={()=>this.props.navigation.goBack()}>
+    <Text style={styles.readyText}> READY  </Text>
+</TouchableOpacity>
+</View> */

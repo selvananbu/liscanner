@@ -52,12 +52,11 @@ export default class ItemReload extends Component {
     };
   }
 
-  onButtonClicked  = (item) => {
-
-  }
-
-  onReadyPressed = (item) => {
-
+  onActionButtonPressed  = (item) => {
+    // if(item.key !== 3)
+    // else {
+    //   //Start Ready Messgae
+    // }
   }
 
 
@@ -66,8 +65,15 @@ export default class ItemReload extends Component {
 
     return (
     <Container>
-      <LiFlatList Menu = {this.state.GridViewItems} columns = {1}  columns = {1} Gotomenu={(item)=> this.onButtonClicked.bind(this,item)}/>
-    <LiFlatList Menu = {this.state.GridViewSubmitItems} isReadyButton = {true} columns = {1} Gotomenu={(item)=> this.onReadyPressed.bind(this,item)} />
+      <LiFlatList Menu = {this.state.GridViewItems} isfinalScreen = {true} columns = {1}  columns = {1} Gotomenu={(item)=> this.onActionButtonPressed.bind(this,item)}/>
+      <View style={{flexDirection:'row',alignContent:'space-around', justifyContent:'space-around'}}>
+         <TouchableOpacity style={styles.undoButton } onPress={this.onActionButtonPressed.bind(this, 'UNDO')}>
+         <Text style={styles.readyText}> UNDO  </Text>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.readyButton } onPress={this.onActionButtonPressed.bind(this, 'READY')}>
+          <Text style={styles.readyText}> READY  </Text>
+         </TouchableOpacity>
+       </View>
   </Container>
 
 );
@@ -75,6 +81,27 @@ export default class ItemReload extends Component {
 }
 
 const styles = StyleSheet.create({
+  undoButton: {
+ 		height:height(8),
+ 		width:width(48),
+ 		backgroundColor:'#881b4c',
+ 		alignItems:'center',
+ 		justifyContent:'center',
+ 		marginBottom:2,
 
+ 	  },
+ 	 readyButton: {
+ 		height:height(8),
+ 		width:width(48),
+ 		backgroundColor:'rgba(0,125,50,0.8)',
+ 		alignItems:'center',
+ 		justifyContent:'center',
+ 		marginBottom:2,
+ 	  },
+ 	  	readyText:{
+ 		color: '#fff',
+ 		fontSize: 20,
+ 		fontWeight: "bold"
+ 	  }
 
 });

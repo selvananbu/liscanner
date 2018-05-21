@@ -1,7 +1,8 @@
 const initial = {
     rackId: {},
     batch: {},
-    item:{}
+    item:{},
+    softkey:{}
 }
 
 export default function(state= initial,action){
@@ -17,6 +18,11 @@ export default function(state= initial,action){
     batch: { ['BATCH'] : action.payload},
     }
     break;
+    case "SET_SOFTKEY":
+    state = {...state,
+    softkey: { ['SOFTKEY'] : action.payload},
+    }
+    break;
         case  "SET_ITEM":
             state  =  {
                 ...state,
@@ -26,6 +32,4 @@ export default function(state= initial,action){
 
     }
 return state;
-} 
-    
-    
+}

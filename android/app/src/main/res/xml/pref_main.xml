@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:defaultValue=" "
+        android:key="blank_notification2"
+        android:title=" "/>
+    <PreferenceCategory android:title="Barcode">
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_barcode_racklength"
+        android:key="rackbarcode_length"
+        android:inputType="number"
+        android:summary="@string/pref_Summary_racklength"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_barcode_racklength" />
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_barcode_itemlength"
+        android:summary="@string/pref_summary_itemlength"
+        android:inputType="number"
+        android:key="itembarcode_length"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_barcode_itemlength" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="soft_scan_key"
+        android:summary="@string/pref_description_soft_key_sumnmary"
+        android:paddingTop="@dimen/nav_header_height"
+        android:title="@string/pref_title_soft_key" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notification">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="notifications_new_message_vibrate"
+            android:title="@string/pref_title_vibrate" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Server Details">
+        <ListPreference
+            android:defaultValue="180"
+            android:entries="@array/pref_sync_frequency_titles"
+            android:entryValues="@array/pref_sync_frequency_values"
+            android:key="sync_frequency"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_sync_frequency" />
+
+        <Preference android:title="@string/pref_title_system_sync_settings">
+            <intent android:action="android.settings.SYNC_SETTINGS" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_default_app_version"
+            android:inputType="textCapWords"
+            android:key="key_appversion"
+            android:summary="1.0"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_app_version" />
+
+        <Preference
+            android:capitalize="words"
+            android:dependency="key_appversion"
+            android:defaultValue="@string/pref_default_app_term_conditions"
+            android:summary="@string/summary_terms_conditions"
+            android:inputType="textCapWords"
+            android:key="key_app_term"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_app_term_condition" />
+
+        <Preference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_default_app_about_lisec"
+            android:summary="@string/summary_about_lisec"
+            android:inputType="textCapWords"
+            android:key="key_about_lisec"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_app_about_lisec" />
+    </PreferenceCategory>
+</PreferenceScreen>

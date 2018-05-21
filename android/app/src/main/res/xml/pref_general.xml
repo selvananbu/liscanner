@@ -1,0 +1,43 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:defaultValue=" "
+        android:key="blank_notification4"
+        android:title=" "/>
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <Preference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_app_version"
+        android:inputType="textCapWords"
+        android:key="key_appversion"
+        android:summary="1.0"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_app_version" />
+
+    <Preference
+        android:capitalize="words"
+        android:dependency="key_appversion"
+        android:defaultValue="@string/pref_default_app_term_conditions"
+        android:summary="@string/summary_terms_conditions"
+        android:inputType="textCapWords"
+        android:key="key_app_term"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_app_term_condition" />
+
+    <Preference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_app_about_lisec"
+        android:summary="@string/summary_about_lisec"
+        android:inputType="textCapWords"
+        android:key="key_about_lisec"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_app_about_lisec" />
+
+</PreferenceScreen>

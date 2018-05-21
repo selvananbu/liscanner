@@ -246,6 +246,7 @@ class OpenApiClient_prod_feedback extends OpenApiClient {
             if(machineID !== null && machineID != undefined) queryParams['machineID'] = machineID;
             if(rackID !== null && rackID != undefined) queryParams['rackID'] = rackID;
             if(externalBarcode !== null && externalBarcode != undefined) queryParams['externalBarcode'] = externalBarcode;
+          
 
             const config = {
                 url: this.getUrl(['todo_lists'], queryParams),
@@ -258,7 +259,7 @@ class OpenApiClient_prod_feedback extends OpenApiClient {
                     console.log(progressEvent, 'completed');
                 }
             }
-            console.log("URL",config.url);
+
             axios.request(config)
                 .then( function (response) {
                      callback(new OpenApiResponse(response));
@@ -313,6 +314,7 @@ class OpenApiClient_prod_feedback extends OpenApiClient {
                     console.log(progressEvent, 'completed');
                 }
             }
+            console.log("URL",config.url);
             axios.request(config)
                 .then( function (response) {
                     callback(new OpenApiResponse(response));

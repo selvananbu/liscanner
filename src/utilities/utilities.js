@@ -7,8 +7,12 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import ScanExample from '../nativeconnector/scanconnector';
+
 export default class Utilities extends Component {
   render() {
+
+    ScanExample.setTitle("Li.Scanner - Utilities");
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Under Construction....</Text>

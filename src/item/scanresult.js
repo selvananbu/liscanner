@@ -37,18 +37,14 @@ import {
     }
 
     alertItemName = (item) => {
-      this.props.setItem(item);
       if(this.props.barcode !== null)
-      Actions.ItemReady();
-      else
-      Actions.ItemReady();
+      Actions.ItemReady({item:item});
     }
 
     callbackWithArg(responseData){
       if(responseData !== null && responseData.state.response.data !== undefined  && Object.keys(responseData.state.response.data).length !== 0){
         this.setState({result:responseData.state.response.data});
         this.setState({isDataAvailable:true});
-
       }
       else{
         ScanExample.startVibrate();
@@ -58,6 +54,7 @@ import {
 
     componentWillMount(){
       var isRack = false;
+      console.log("@@@@",this.props.keyId,this.props.result);
       if(this.props.keyId != null && this.props.keyId != undefined){
           if(this.props.keyId === 'RACK')
             isRack = true;
@@ -70,10 +67,9 @@ import {
         }
         else{
           this.props.setBatch(this.props.result);
-
           obj.GET_todo_lists(this.callbackWithArg.bind(this), null, null, this.props.result);
         }
-        
+
       }
     }
 
@@ -108,25 +104,24 @@ import {
                   <Text style={styles.orderno}>Order No: {item.orderNo}</Text>
                   <Text style={styles.pane}>Batch No: {item.batchNo}                              Pane No: {item.pane}</Text>
                   <Text style={styles.pane}>Batch Seq: {item.batchSeq}                                       Comp: {item.comp}</Text>
-                  
+
                     {item.part.map((value, elem) => {
-                      { console.log("!@@@@@", value.partBcd) };
                       return (
                         <View>
                         <Text style={styles.pane}>Part Count: {value.partCnt}                                       Slot: {value.slot}</Text>
                         <Text style={styles.pane}>Physical Rack: {value.physRack}             Barcode: {value.partBcd}</Text>
-                        <Text>  Status: {value.prodStatus}</Text>
-                        
+                      <Text> Status: {value.prodStatus}</Text>
+
                         </View>
                     );
                     })}
+                      <Text style={styles.pane}>Step No: {item.stepNo}</Text>
 
                 </View>
               </TouchableOpacity>
               )}
               />
           </View>
-
         );
       }
       else{

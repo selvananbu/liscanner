@@ -1,0 +1,30 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+
+
+    <header
+        android:fragment="com.liscanner.view.settings.SettingsActivity$BarcodePreferenceFragment"
+        android:icon="@drawable/ic_barcode_scanner_24dp"
+        android:summary="Soft Scanning,Barcode Length Setting of Rack,Item etc"
+        android:title="@string/pref_header_barcode" />
+
+    <header
+        android:fragment="com.liscanner.view.settings.SettingsActivity$NotificationPreferenceFragment"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:summary="Vibrate Mode"
+        android:title="@string/pref_header_notifications" />
+
+    <header
+        android:fragment="com.liscanner.view.settings.SettingsActivity$DataSyncPreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:summary="Server Sync Settings"
+        android:title="@string/pref_header_data_sync" />
+    <header
+        android:fragment="com.liscanner.view.settings.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_About"
+        android:summary="App Version,Terms and Conditions,About Lisec"
+        />
+</preference-headers>

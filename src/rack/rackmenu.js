@@ -5,8 +5,12 @@ import {
     StyleSheet,
 } from 'react-native';
 
+
+import ScanExample from '../nativeconnector/scanconnector';
+
 export default class RackMenu extends Component {
     render() {
+        ScanExample.setTitle("Li.Scanner - Rack");
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Under Construction....</Text>

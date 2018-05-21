@@ -3,8 +3,11 @@ package com.liscanner;
 import com.facebook.react.ReactActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -38,6 +41,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.reactlibrary.JSBundleManager.RNAU_SHARED_PREFERENCES;
+import static com.reactlibrary.JSBundleManager.RNAU_STORED_VERSION;
 import static com.reactlibrary.util.FileUtil.isFileExistInDevice;
 import static com.reactlibrary.util.FileUtil.retrieveConnectionListFromFile;
 import static com.reactlibrary.view.ListConnectionActivity.versionList;
@@ -194,10 +199,18 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
     @Override
     protected void onResume() {
         super.onResume();
+        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this,this);
             }
+        if( mReactInstanceManager.getCurrentReactContext() == null)return;
+
+        boolean vibrate = myPrefs.getBoolean("soft_scan_key",true);
+        WritableMap params = Arguments.createMap();
+        params.putBoolean("softkey",vibrate);
+        mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("onSoftKeyDisabled",params);
 
     }
 
