@@ -91,7 +91,6 @@ class ItemReady extends Component {
 			if (this.props.item != undefined) {
 				var itemId = this.props.item;
 				{itemId.part.map((value, elem) => {
-				console.log("@@@@@",value.partCnt);
 				obj.PATCH_orders_order_item_pane_component_pieceCount_worksteps_stepID_ready(this.callbackWithArg.bind(this), itemId.orderNo, itemId.itemNo, itemId.pane, itemId.comp,
 					value.partCnt,itemId.stepNo,405,this.props.obj.rackId.RACK);
 			})}
@@ -100,14 +99,14 @@ class ItemReady extends Component {
 			}
 }
 callbackWithArg(responseData) {
-	console.log("@@@@####",responseData);
+	console.log("Response For Ready",responseData);
 	if (responseData !== null && responseData.state.response.data !== undefined && Object.keys(responseData.state.response.data).length !== 0) {
 
 	}
 }
 
-componentWillMount(){
-
+componentDidMount(){
+ScanExample.setTitle("Li.Scanner - Item - Ready");
 	if (this.props.result != undefined){
 		this.props.setRack(this.props.result);
 	}
@@ -115,8 +114,7 @@ componentWillMount(){
 }
 
 	render() {
-		console.log("RACK1",this.props.obj.rackId.RACK);
-		ScanExample.setTitle("Li.Scanner - Item - Ready");
+
 		var isQtyReadyScreen = false;
 		var result = '', res = '';
 		var isSoftKeyEnabledVar = true;

@@ -64,13 +64,17 @@ export default class App extends Component<Props> {
   }
 
   _onHardKeyBackButton(){
+
     var self=this;
     DeviceEventEmitter.addListener('onBackPressed', function (e: Event) {
       const scene = Actions.currentScene;
+      console.log("!#@@@@@",scene);
       if (scene === 'LiScannerMenu') {
         BackHandler.exitApp();
         return true;
       }
+      if(scene === 'ScanResult')
+          ScanExample.setTitle("Li.Scanner - Item - Ready");
       self._checkSceneToGoBack()
     });
   }
@@ -83,7 +87,6 @@ export default class App extends Component<Props> {
       return true;
     }
     else if(scene == 'ItemReadyQuantity' || scene === 'ItemReady' || scene === 'ItemBroken' || scene === 'ItemReload'){
-      ScanExample.setTitle("Li.Scanner - Item");
       Actions.ItemMenu();
       return true;
     }
@@ -94,11 +97,9 @@ export default class App extends Component<Props> {
   }
 
   _previousOfItemMenu(){
-    ScanExample.setTitle("LiScanner");
     Actions.LiScannerMenu();
   }
   _backToItemMenu(){
-    ScanExample.setTitle("Li.Scanner - Item");
     Actions.ItemMenu();
   }
 

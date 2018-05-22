@@ -81,7 +81,7 @@ const SIZE = window.width;
 	}
 
 	componentDidMount(){
-
+		ScanExample.setTitle("Li.Scanner");
 	    DeviceEventEmitter.addListener('onSoftKeyDisabled', function (e: Event) {
 				if(e.softkey != null && e.softkey != undefined){
 					this.props.setSoftKey(e.softkey)

@@ -67,9 +67,6 @@ import * as Action from '../liaction/index';
 	}
 
 	Gotomainmenu  = (item) => {
-		console.log("###",item);
-		console.log("###",item.text);
-
 		if (item.text===" ITEM\n READY")
 		{
 				Actions.ItemReady({title:'LiScanner - Item - Ready'})
@@ -97,13 +94,13 @@ import * as Action from '../liaction/index';
 	}
 
 	componentDidMount(){
+		  ScanExample.setTitle("Li.Scanner - Item");
 			this.props.setRack(' ');
 			this.props.setBatch(' ');
 	}
 
 
 	render() {
-	 ScanExample.setTitle("Li.Scanner - Item");
    return (
 			<Container>
 					<LiFlatList Menu = {this.state.GridViewItems}  columns = {2} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item)}/>

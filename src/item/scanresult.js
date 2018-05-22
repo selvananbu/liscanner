@@ -53,8 +53,8 @@ import {
     }
 
     componentWillMount(){
+      ScanExample.setTitle("Li.Scanner - BarCode - Result");
       var isRack = false;
-      console.log("@@@@",this.props.keyId,this.props.result);
       if(this.props.keyId != null && this.props.keyId != undefined){
           if(this.props.keyId === 'RACK')
             isRack = true;
@@ -84,7 +84,6 @@ import {
     );
 
     render() {
-      ScanExample.setTitle("Li.Scanner - BarCode - Result");
       if(this.state.isDataAvailable){
         return (
           <View style={styles.container}>

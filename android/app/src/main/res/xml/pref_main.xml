@@ -56,7 +56,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">
-        <Preference
+        <EditTextPreference
             android:capitalize="words"
             android:defaultValue="@string/pref_default_app_version"
             android:inputType="textCapWords"
