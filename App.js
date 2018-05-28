@@ -48,9 +48,31 @@ const store = createStore(allReducers);
 type Props = {};
 export default class App extends Component<Props> {
 
-  componentWillMount() {
+  componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', function() {
+      const scene = Actions.currentScene;
+      if(scene == 'ItemMenu' ||  scene === 'Utilities' || scene === 'Commission' || scene === 'RackMenu'){
+        ScanExample.setTitle("LiScanner");
+        Actions.LiScannerMenu();
+        return true;
+      }
+      else if(scene == 'ItemReadyQuantity' || scene === 'ItemReady' || scene === 'ItemBroken' || scene === 'ItemReload'){
+         ScanExample.setTitle("LiScanner - Item");
+          Actions.ItemMenu();
+          return true;
+      }
+      else if(scene == 'ScanResult'){
+         ScanExample.setTitle("LiScanner - Item - Ready");
+         Actions.ItemReady();
+         return true;
+      }
+      else{
+        BackHandler.exitApp();
+        return true;
+      }
+    });
+
     DeviceEventEmitter.addListener('showResult', function (e: Event) {
-      console.log("result",e.key);
       if(e.key === "RACK"){
         Actions.ItemReady({result:e.result});
       }
@@ -58,53 +80,11 @@ export default class App extends Component<Props> {
         Actions.ScanResult({ keyId: e.key, result: e.result });
       }
     });
-
-    this._onHardKeyBackButton()
-       MenuExample.show("LiScanner,Item,Rack,Commision,Utilities");
-  }
-
-  _onHardKeyBackButton(){
-
-    var self=this;
-    DeviceEventEmitter.addListener('onBackPressed', function (e: Event) {
-      const scene = Actions.currentScene;
-      console.log("!#@@@@@",scene);
-      if (scene === 'LiScannerMenu') {
-        BackHandler.exitApp();
-        return true;
-      }
-      if(scene === 'ScanResult')
-          ScanExample.setTitle("Li.Scanner - Item - Ready");
-      self._checkSceneToGoBack()
-    });
-  }
-
-  _checkSceneToGoBack(){
-    const scene = Actions.currentScene;
-    var self=this;
-    if (scene == 'ItemMenu' ||  scene === 'Utilities' || scene === 'Commission' || scene === 'RackMenu'){
-      self._previousOfItemMenu()
-      return true;
-    }
-    else if(scene == 'ItemReadyQuantity' || scene === 'ItemReady' || scene === 'ItemBroken' || scene === 'ItemReload'){
-      Actions.ItemMenu();
-      return true;
-    }
-    else{
-      Actions.pop();
-      return true;
-    }
-  }
-
-  _previousOfItemMenu(){
-    Actions.LiScannerMenu();
-  }
-  _backToItemMenu(){
-    Actions.ItemMenu();
+     MenuExample.show("LiScanner,Item,Rack,Commision,Utilities");
   }
 
   componentWillUnmount() {
-    DeviceEventEmitter.removeEventListener('onBackPressed');
+    DeviceEventEmitter.removeEventListener('hardwareBackPress');
   }
 
   constructor(props){
@@ -115,17 +95,17 @@ export default class App extends Component<Props> {
    <Provider store={store}>
       <Router>
         <Scene key="root">
-         <Scene key="LiScannerMenu" component={LiScannerMenu} animation='fade' hideNavBar={true} initial={true} />
-         <Scene key="ItemMenu" component={ItemMenu} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="ItemReady" component={ItemReady} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="ScanResult" component={ScanResult} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="ItemReadyQuantity" component={ItemReadyQuantity} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="ItemBroken" component={ItemBroken} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="RackMenu" component={RackMenu} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="Commission" component={Commission} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="ItemReload" component={ItemReload} animation='fade' hideNavBar={true} initial={false}/>
-         <Scene key="Utilities" component={Utilities} animation='fade' hideNavBar={true} initial={false}/>
-       </Scene>
+           <Scene key="LiScannerMenu" component={LiScannerMenu} animation='fade' hideNavBar={true} initial={true} />
+           <Scene key="ItemMenu" component={ItemMenu} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="ItemReady" component={ItemReady} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="ScanResult" component={ScanResult} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="ItemReadyQuantity" component={ItemReadyQuantity} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="ItemBroken" component={ItemBroken} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="RackMenu" component={RackMenu} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="Commission" component={Commission} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="ItemReload" component={ItemReload} animation='fade' hideNavBar={true} initial={false}/>
+           <Scene key="Utilities" component={Utilities} animation='fade' hideNavBar={true} initial={false}/>
+         </Scene>
      </Router>
    </Provider>
 );

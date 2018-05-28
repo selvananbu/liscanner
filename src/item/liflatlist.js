@@ -10,8 +10,8 @@ import {
 	TextInput,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
-import Grid from 'react-native-grid-component';
-import { ThemeProvider } from 'react-native-material-ui';
+// import Grid from 'react-native-grid-component';
+// import { ThemeProvider } from 'react-native-material-ui';
 import { Actions, ActionConst } from 'react-native-router-flux';
 
 import {Button,Container,Content,Header,Left,Item,Input} from 'native-base';

@@ -9,8 +9,11 @@ import ScanExample from '../nativeconnector/scanconnector';
 
 
 export default class CommissionMenu extends Component {
+
+  componentWillMount(){
+        ScanExample.setTitle("LiScanner - Commission");
+  }
     render() {
-        ScanExample.setTitle("Li.Scanner - Commission");
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Under Construction....</Text>

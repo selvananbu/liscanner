@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	TouchableHighlightStatic,
 	Animated,
+	BackHandler,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
 import Grid from 'react-native-grid-component';
@@ -29,6 +30,7 @@ import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import LiFlatList from './liflatlist';
+import MenuConnector from '../nativeconnector/menuconnector';
 
 var obj = new OpenApiClient_prod_feedback('http://swpdmsrv4.lisec.internal:18720', 'DEMO', 'PROD');
 
@@ -79,15 +81,16 @@ class ItemReady extends Component {
 
 	onActionButtonPressed = (item) => {
 
-		// if(item.key === '1'){
-		// 	if (Object.keys(this.props.obj.item) !== 0) {
-		// 		var itemId = this.props.obj.item;
-		// 		obj.PATCH_orders_order_item_pane_component_pieceCount_worksteps_stepID_ready(this.callbackWithArg.bind(this),itemId.orderNo,itemId.itemNo,itemId.pane,itemId.comp,
-		// 		itemId.stepNo,itemId.partCnt,itemId,454,itemId.physRack);
-		// 	}
-		// }
-		// else
-		if(item === 'READY'){
+		if(item === 'UNDO'){
+			if (this.props.item != undefined) {
+				var itemId = this.props.item;
+				{itemId.part.map((value, elem) => {
+				obj.PATCH_orders_order_item_pane_component_pieceCount_worksteps_stepID_undo(this.callbackWithArg.bind(this), itemId.orderNo, itemId.itemNo, itemId.pane, itemId.comp,
+					value.partCnt,itemId.stepNo,405,this.props.obj.rackId.RACK);
+			})}
+			}
+		}
+		else if(item === 'READY'){
 			if (this.props.item != undefined) {
 				var itemId = this.props.item;
 				{itemId.part.map((value, elem) => {
@@ -99,18 +102,18 @@ class ItemReady extends Component {
 			}
 }
 callbackWithArg(responseData) {
-	console.log("Response For Ready",responseData);
-	if (responseData !== null && responseData.state.response.data !== undefined && Object.keys(responseData.state.response.data).length !== 0) {
-
+	console.log("Response For Ready",responseData.state.response.status);
+	if (responseData !== null && responseData.state.response.status === 200)
+	{
+			MenuConnector.showToast("Action Sucessfull");
 	}
 }
 
 componentDidMount(){
-ScanExample.setTitle("Li.Scanner - Item - Ready");
+ScanExample.setTitle("LiScanner - Item - Ready");
 	if (this.props.result != undefined){
 		this.props.setRack(this.props.result);
 	}
-
 }
 
 	render() {

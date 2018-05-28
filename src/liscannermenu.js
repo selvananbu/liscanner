@@ -7,6 +7,7 @@ import {
 	TouchableHighlightStatic,
 	Animated,
   DeviceEventEmitter,
+	BackHandler,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
 import Grid from 'react-native-grid-component';
@@ -61,16 +62,15 @@ const SIZE = window.width;
 		};
 	}
 	Gotomenu  = (item) => {
-		console.log(item);
 		if (item==="ITEM")
 		{
 			 Actions.ItemMenu()
 		}
-		if (item==="RACK")
+		else if (item==="RACK")
 		{
 			 Actions.RackMenu()
 		}
-		if (item==="COMMISSION")
+		else if (item==="COMMISSION")
 		{
 			 Actions.Commission()
 		}
@@ -78,10 +78,12 @@ const SIZE = window.width;
 		 {
 			 ScanExample.startSettings();
 		 }
+		 else
+				Alert.alert(item);
 	}
 
 	componentDidMount(){
-		ScanExample.setTitle("Li.Scanner");
+		ScanExample.setTitle("LiScanner");
 	    DeviceEventEmitter.addListener('onSoftKeyDisabled', function (e: Event) {
 				if(e.softkey != null && e.softkey != undefined){
 					this.props.setSoftKey(e.softkey)

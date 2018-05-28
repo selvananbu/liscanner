@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	TouchableHighlightStatic,
 	Animated,
+	BackHandler,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -81,7 +82,7 @@ import * as Action from '../liaction/index';
 		}
 		else if(item.text === " ITEM\n RELOAD")
 		{
-			Actions.ItemReload({title:'LiScanner - Item - Reload'})
+			Actions.ItemReady({title:'LiScanner - Item - Reload'})
 		}
 		else{
 			Alert.alert(item.text);
@@ -94,7 +95,7 @@ import * as Action from '../liaction/index';
 	}
 
 	componentDidMount(){
-		  ScanExample.setTitle("Li.Scanner - Item");
+		  ScanExample.setTitle("LiScanner - Item");
 			this.props.setRack(' ');
 			this.props.setBatch(' ');
 	}

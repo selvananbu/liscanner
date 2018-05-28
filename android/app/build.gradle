@@ -142,11 +142,11 @@ dependencies {
     compile project(':react-native-jsbundlemanager')
     // From node_modules
     compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0'
     compile 'com.journeyapps:zxing-android-embedded:3.6.0'
     compile 'com.facebook.react:react-native:+'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 // Run this once to be able to run the application with BUCK

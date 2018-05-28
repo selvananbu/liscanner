@@ -9,8 +9,11 @@ import {
 import ScanExample from '../nativeconnector/scanconnector';
 
 export default class RackMenu extends Component {
+
+  componentWillMount(){
+        ScanExample.setTitle("LiScanner - Rack");
+  }
     render() {
-        ScanExample.setTitle("Li.Scanner - Rack");
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Under Construction....</Text>

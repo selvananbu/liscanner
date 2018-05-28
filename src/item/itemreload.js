@@ -61,7 +61,7 @@ export default class ItemReload extends Component {
 
 
   render() {
-    ScanExample.setTitle("Li.Scanner - Item - Reload");
+    ScanExample.setTitle("LiScanner - Item - Reload");
 
     return (
     <Container>

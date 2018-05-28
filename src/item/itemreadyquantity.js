@@ -67,7 +67,7 @@ export default class ItemReadyQuantity extends Component {
 
 
   render() {
-    ScanExample.setTitle("Li.Scanner - Item - Ready/QTY");
+    ScanExample.setTitle("LiScanner - Item - Ready/QTY");
     return (
       <View style={{flex:1}}>
         <LiFlatList Menu = {this.state.GridViewItems} isfinalScreen = {true} isReadyQty = {true} columns = {1} Gotomenu={(item)=> this.onActionButtonPressed.bind(this,item)}/>

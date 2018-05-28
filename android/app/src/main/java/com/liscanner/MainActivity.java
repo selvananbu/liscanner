@@ -223,12 +223,8 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
         }
 
         else {
-
-            WritableMap params = Arguments.createMap();
-            mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit("onBackPressed",params);
-
-            return false;
+            mReactInstanceManager.onBackPressed();
+            return true;
         }
     }
 

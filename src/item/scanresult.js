@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  BackHandler,
   TouchableHighlight,
   ScrollView} from 'react-native';
   import {List} from 'react-native-elements';
@@ -53,7 +54,7 @@ import {
     }
 
     componentWillMount(){
-      ScanExample.setTitle("Li.Scanner - BarCode - Result");
+      ScanExample.setTitle("LiScanner - BarCode - Result");
       var isRack = false;
       if(this.props.keyId != null && this.props.keyId != undefined){
           if(this.props.keyId === 'RACK')

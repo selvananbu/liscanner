@@ -58,7 +58,7 @@ export default class ItemBroken extends Component {
 
 		}
 	render() {
-	 ScanExample.setTitle("Li.Scanner - Item  - Broken");
+	 ScanExample.setTitle("LiScanner - Item  - Broken");
 
 		return (
       <Container>

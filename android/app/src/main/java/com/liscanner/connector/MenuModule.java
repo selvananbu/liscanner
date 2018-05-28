@@ -2,11 +2,14 @@ package com.liscanner.connector;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.liscanner.MainActivity;
+import com.reactlibrary.JSBundleManager;
+import com.reactlibrary.JSBundleManagerActivity;
 import com.reactlibrary.view.ListConnectionActivity;
 import com.reactlibrary.view.NewConnectionActivity;
 
@@ -33,6 +36,12 @@ public class MenuModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void closeApp(){
         getCurrentActivity().onBackPressed();
+    }
+
+    @ReactMethod
+    public void showToast(String message){
+        Toast toast = Toast.makeText(mreactContext, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 @ReactMethod
