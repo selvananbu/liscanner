@@ -100,5 +100,9 @@
     <string name="summary_terms_conditions">View the Terms and Coditions of our Software.</string>
     <string name="pref_title_app_version">App Version</string>
     <string name="pref_default_app_version">1.0</string>
+    <string name="pref_summary_machineId">Set the machine Id for scanner device.</string>
+    <string name="pref_title_barcode_machineId">MachineId of Device.</string>
+    <string name="pref_summary_workstepId">Set the Workstep of Scanner Item.</string>
+    <string name="pref_title_barcode_workstepId">Workstep of Item.</string>
 
 </resources>

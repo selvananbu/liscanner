@@ -31,7 +31,7 @@ import ScanExample from '../nativeconnector/scanconnector';
 import LiFlatList from './liflatlist';
 import * as Action from '../liaction/index';
 
-  class ItemMenu extends Component {
+class ItemMenu extends Component {
 
 	constructor(props) {
 		super(props);
@@ -41,36 +41,31 @@ import * as Action from '../liaction/index';
 			GridViewItems: [
 				{
 					key:'0',
-				text: ' ITEM\n READY',
+					text: ' ITEM\n READY',
 					MenuIcon_url:'src_image_item_ready'
 				},
 				{
 					key:'1',
-				text: '  ITEM\n READY/QTY',
-				MenuIcon_url:'src_image_item_ready_qty'
+					text: '  ITEM\n READY/QTY',
+					MenuIcon_url:'src_image_item_ready_qty'
 				},
 
 				{
 					key:'2',
-				text: ' ITEM\n BROKEN',
-				MenuIcon_url:'src_image_item_broken'
+					text: ' ITEM\n BROKEN',
+					MenuIcon_url:'src_image_item_broken'
 				},
-				{
-					key:'3',
-				text: ' ITEM\n RELOAD',
-				MenuIcon_url:'src_image_item_reload'
-				},
-				],
+			],
 		};
 
 		this._onPress = this._onPress.bind(this);
 		this.growAnimated = new Animated.Value(0);
 	}
 
-	Gotomainmenu  = (item) => {
+	Gotomenu  = (item) => {
 		if (item.text===" ITEM\n READY")
 		{
-				Actions.ItemReady({title:'LiScanner - Item - Ready'})
+			Actions.ItemReady({title:'LiScanner - Item - Ready'})
 		}
 		else if(item.text ==="  ITEM\n READY/QTY")
 		{
@@ -80,14 +75,10 @@ import * as Action from '../liaction/index';
 		{
 			Actions.ItemBroken({title:'LiScanner - Item - Broken'})
 		}
-		else if(item.text === " ITEM\n RELOAD")
-		{
-			Actions.ItemReady({title:'LiScanner - Item - Reload'})
-		}
 		else{
 			Alert.alert(item.text);
 		}
-		}
+	}
 
 	_onPress() {
 		if (this.state.isLoading) return;
@@ -95,19 +86,46 @@ import * as Action from '../liaction/index';
 	}
 
 	componentDidMount(){
-		  ScanExample.setTitle("LiScanner - Item");
-			this.props.setRack(' ');
-			this.props.setBatch(' ');
+		ScanExample.setTitle("LiScanner - Item");
+		this.props.setRack('');
+		this.props.setBatch('');
+		this.props.setReasonId('');
+		this.props.setReasonChoicesUpdated(false);
 	}
 
 
 	render() {
-   return (
-			<Container>
-					<LiFlatList Menu = {this.state.GridViewItems}  columns = {2} Gotomenu={(item)=> this.Gotomainmenu.bind(this,item)}/>
-			</Container>
-		);
+		return(this.returnView())
 	}
+	returnView(){
+		return (
+			<View style={{flex:1,height:height(85),backgroundColor:'lightgrey'}}>
+				<FlatList data={ this.state.GridViewItems} renderItem={({item}) =>{
+					return(this.flatlistView(item));
+				}
+			}
+			numColumns={1}
+		/>
+	</View>
+);
+}
+flatlistView(item){
+	return(
+		<View style={styles.GridViewBlockStyle} >
+			<View>
+				<Image source={{uri:item.MenuIcon_url}} style={styles.ImageIconStyle} resizeMode='contain'/>
+			</View>
+			<View style={{width:width(70),justifyContent:'center',}}>
+				<TouchableOpacity onPress={this.Gotomenu.bind(this, item)}>
+					<Text style={styles.GridViewInsideTextItemStyle} > {item.text} </Text>
+				</TouchableOpacity>
+			</View>
+			<TouchableOpacity onPress={this.Gotomenu.bind(this, item)}>
+				<Image source={{uri:'src_image_right_dir'}} style={styles.ImageIconStyle2}  resizeMode='contain'/>
+			</TouchableOpacity>
+		</View>
+	);
+}
 }
 
 function mapStateToProps(state) {
@@ -121,7 +139,10 @@ function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		setRack: Action.setRack,
 		setBatch: Action.setBatch,
-		setSoftKey: Action.setSoftKey
+		setSoftKey: Action.setSoftKey,
+		machineId:Action.setMachineId,
+    setReasonId:Action.setReasonId,
+    setReasonChoicesUpdated:Action.setReasonChoicesUpdated
 	},dispatch)
 }
 
@@ -132,29 +153,48 @@ export default connect(
 const styles = StyleSheet.create({
 
 	GridViewBlockStyle: {
-		borderColor:'#881b4c',
-		justifyContent: 'center',
 		flex:1,
+		height:height(88/3),
+		flexDirection:'row',
+		backgroundColor: 'whitesmoke',
+		borderTopColor:'#000',
+		borderBottomColor:'#000',
+		borderTopWidth:0.5,
+		borderTopWidth:height(0.1),
+		borderBottomWidth:height(0.1),
+		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: height(42),
-		margin: 6,
-		backgroundColor: 'rgba(89,89,89,0.5)',
-	  },
-	  GridViewInsideTextItemStyle: {
-		 color: '#881b4c',
-		 padding: 10,
-		 fontSize: 26,
-		 fontWeight: 'bold',
-		 fontFamily: 'roboto',
-		 justifyContent: 'center',
-	   },
-	   ImageIconStyle: {
-		padding: 10,
-		margin: 5,
-		height: 75,
-		width: 75,
-		resizeMode : 'stretch',
+		shadowRadius: 20,
+		elevation: 5,
+	},
+	GridViewInsideTextItemStyle: {
+		paddingTop: 1,
+		paddingBottom: 1,
+		color: '#881b4c',
+		fontSize: 26,
+		textShadowOffset:{wdith:2.5,height:2},
+		fontWeight: '400',
+		textShadowColor:'lightgrey',
+		justifyContent: 'center',
+	},
+	ImageIconStyle: {
+		padding: 0.5,
+		marginHorizontal: width(2.5),
+		paddingHorizontal: width(2),
+		margin: 2,
+		width: width(10),
+		height: height(10),
+		resizeMode : 'contain',
 
-	 },
+	},
+	ImageIconStyle2: {
+		marginLeft: 5,
+		paddingHorizontal: 1,
+		margin: 2,
+		height: height(8),
+		width: width(8),
+		resizeMode : 'contain',
+
+	},
 
 });

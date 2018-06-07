@@ -27,74 +27,50 @@ import {
   import {bindActionCreators} from 'redux';
   import * as Action from '../liaction/index';
 
-
   var axios = require('axios');
   var obj = new OpenApiClient_prod_feedback('http://swpdmsrv4.lisec.internal:18720','DEMO','PROD');
+  // http://swpdmsrv4.lisec.internal:18720/openapi/DEMO/PROD/prod_feedback/delivery_racks/16112016
 
-  class ScanResult extends Component {
+
+  class ReadyQuantityScanResult extends Component {
     constructor(props){
       super(props)
       this.state = {isDataAvailable:false};
     }
 
-
+    alertItemName = (item) => {
+        if(this.props.result !== null){
+        this.props.setItem(item);
+        Actions.ItemReadyQuantity({item:item});
+    }
+    }
 
     callbackWithArg(responseData){
+      // console.log('CALL bACK WITH ARG',responseData.state.response.data)
       if(responseData !== null && responseData.state.response.data !== undefined  && Object.keys(responseData.state.response.data).length !== 0){
         this.setState({result:responseData.state.response.data});
         this.setState({isDataAvailable:true});
       }
       else{
         ScanExample.startVibrate();
-        Actions.ItemReady();
+        Actions.ItemReadyQuantity();
       }
-    }
-
-    alertItemName = (item) => {
-      if(this.props.barcode !== null)
-      this.props.setItem(item);
-      if(this.props.keyId === "ITEM")
-        Actions.ItemReady({item:item});
-      else if(this.props.keyId === "ITEMREASON")
-         Actions.ItemBroken();
-    }
-    _onLongPressItems = (item) => {
-      ScanExample.startGraphicsViewer(item.orderNo.toString());
     }
 
     componentWillMount(){
-      ScanExample.setTitle("LiScanner - BarCode - Result");
+      ScanExample.setTitle("LiScanner - Ready/Qty - Result");
       var isRack = false;
-      var isReason = false;
-      if(this.props.keyId != null && this.props.keyId != undefined){
-          if(this.props.keyId === 'RACK')
-            isRack = true;
-          else if(this.props.keyId === 'ITEMREASON')
-            isReason = true;
-      }
-
-      this.props.clearItem();
 
       if(this.props.result !== null){
-        if(isRack){
-          this.props.setRack(this.props.result);
-          Actions.ItemReady();
-        }
-        else{
           this.props.setBatch(this.props.result);
-          var machineId = 405;
-    			if (Object.keys(this.props.obj.machineId).length !== 0 && Object.keys(this.props.obj.machineId) !== undefined){
-    				machineId = this.props.obj.machineId.MACHINEID;
-    			}
-          obj.GET_todo_lists(this.callbackWithArg.bind(this), null, null, this.props.result,null,null,null,null,null);
+          obj.GET_todo_lists(this.callbackWithArg.bind(this),null,null, this.props.result);
         }
-
       }
-    }
+
 
     renderSeparator = () => (
       <View
-        style={{
+        style = {{
           height:1,
           width:"100%",
           backgroundColor:"#CED0CE",
@@ -103,44 +79,40 @@ import {
     );
 
     render() {
-      console.log("ITEM",this.props.item);
       if(this.state.isDataAvailable){
         return (
           <View style={styles.container}>
-            <TouchableOpacity style = {styles.header}>
-              <Text style = {styles.headerText}>
-                Orders
-              </Text>
-            </TouchableOpacity>
-            <FlatList
-              data={this.state.result.item}
-              ItemSeparatorComponent={this.renderSeparator}
-              keyExtractor={(item, index) => index}
-              renderItem={({item , separators}) => (
-                <TouchableOpacity
-                  onPress={() => this.alertItemName(item)}
-                  onLongPress={() => this._onLongPressItems(item)} >
-                <View style={styles.flatview}>
-                  <Text style={styles.orderno}>Order No: {item.orderNo}</Text>
-                  <Text style={styles.pane}>Batch No: {item.batchNo}                              Pane No: {item.pane}</Text>
-                  <Text style={styles.pane}>Batch Seq: {item.batchSeq}                                       Comp: {item.comp}</Text>
-
-                    {item.part.map((value, elem) => {
-                      return (
-                        <View>
-                        <Text style={styles.pane}>Part Count: {value.partCnt}                                       Slot: {value.slot}</Text>
-                        <Text style={styles.pane}>Physical Rack: {value.physRack}             Barcode: {value.partBcd}</Text>
-                      <Text> Status: {value.prodStatus}</Text>
-
-                        </View>
-                    );
-                    })}
-                      <Text style={styles.pane}>Step No: {item.stepNo}</Text>
-
-                </View>
+              <TouchableOpacity style = {styles.header}>
+                  <Text style = {styles.headerText}>
+                    Ready/Quantity Results
+                  </Text>
               </TouchableOpacity>
-              )}
-              />
+                <FlatList
+                  data={this.state.result.item}
+                  ItemSeparatorComponent={this.renderSeparator}
+                  keyExtractor={(item, index) => index}
+                  renderItem={({item , separators}) => (
+                    <TouchableOpacity
+                        onPress={() => this.alertItemName(item)}>
+                        <View style={styles.flatview}>
+                        <Text style={styles.orderno}>Order No: {item.orderNo}</Text>
+                        <Text style={styles.pane}>Batch No: {item.batchNo}                              Pane No: {item.pane}</Text>
+                        <Text style={styles.pane}>Batch Seq: {item.batchSeq}                                       Comp: {item.comp}</Text>
+
+                        {item.part.map((value, key) => {
+                          return (
+                            <View>
+                              <Text style={styles.pane}>Part Count: {value.partCnt}                                       Slot: {value.slot}</Text>
+                              <Text style={styles.pane}>Physical Rack: {value.physRack}             Barcode: {value.partBcd}</Text>
+                              <Text> Status: {value.prodStatus}</Text>
+                            </View>
+                        );
+                        })}
+                          <Text style={styles.pane}>Step No: {item.stepNo}</Text>
+                    </View>
+                    </TouchableOpacity>
+                    )}
+                  />
           </View>
         );
       }
@@ -149,7 +121,7 @@ import {
           <View style={styles.container}>
             <TouchableOpacity style = {styles.header}>
               <Text style = {styles.headerText}>
-                Orders
+              Ready/Quantity Details
               </Text>
             </TouchableOpacity>
             <View style={styles.containerPlain}>
@@ -162,28 +134,24 @@ import {
     }
   }
 
+
   function mapStateToProps(state) {
     return {
       obj: state.ItemReady
-
     };
   }
 
-  function mapDispatchToProps(dispatch){
-    return bindActionCreators({
-      setRack: Action.setRack,
-      setBatch: Action.setBatch,
-      setItem:  Action.setItem,
-  		setWorkstepId: Action.setWorkstepId,
-  		clearItem: Action.clearItem,
+  function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+      setRack:Action.setRack,
+      setBatch:Action.setBatch,
+      setItem: Action.setItem
     },dispatch)
   }
 
   export default connect(
-    mapStateToProps, mapDispatchToProps
-  )(ScanResult);
-
-
+    mapStateToProps,mapDispatchToProps
+  )(ReadyQuantityScanResult);
 
   const styles = StyleSheet.create({
     containerPlain: {
@@ -209,8 +177,8 @@ import {
       borderBottomWidth:0.5,
     },
     header: {
-      backgroundColor: '#dfcee7',
-      padding:10,
+      backgroundColor: '#595959',
+      padding:5,
     },
     ImageIconStyle:{
       alignItems: 'flex-end',
@@ -227,12 +195,11 @@ import {
       width:375,
     },
     headerText: {
-      color:'#660033',
-      fontSize: 30,
+      color:'#fff',
+      fontSize: 16,
       textAlign: 'center',
-      fontWeight: 'bold',
+      fontWeight: '400',
       fontFamily: 'Cochin',
-      paddingBottom:10
     },
     orderno: {
       fontSize: 20,

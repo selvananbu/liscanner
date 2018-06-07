@@ -23,6 +23,7 @@
     "react-native-material-ui": "^1.22.2",
     "react-native-progress": "^3.4.0",
     "react-native-router-flux": "^4.0.0-beta.28",
+    "react-native-table-component": "^1.1.8",
     "react-native-web": "^0.6.1",
     "react-redux": "^5.0.7",
     "react-router-flux": "^1.0.0",

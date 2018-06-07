@@ -212,6 +212,12 @@ public class MainActivity extends JSBundleManagerActivity implements  JSBundleMa
         mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("onSoftKeyDisabled",params);
 
+        String workstepId = myPrefs.getString("machineId_length","0");
+        WritableMap workStepParams = Arguments.createMap();
+        workStepParams.putString("machineId", workstepId);
+        mReactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("sendWorkStepId", workStepParams);
+
     }
 
     public boolean isHomeScreen() {

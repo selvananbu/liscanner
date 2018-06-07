@@ -46,6 +46,8 @@ public class SettingsActivity_test extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("key_appversion"));
             bindPreferenceSummaryToValue(findPreference("rackbarcode_length"));
             bindPreferenceSummaryToValue(findPreference("itembarcode_length"));
+            bindPreferenceSummaryToValue(findPreference("machineId_length"));
+            bindPreferenceSummaryToValue(findPreference("workstep_length"));
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 
         }
@@ -107,9 +109,11 @@ public class SettingsActivity_test extends AppCompatPreferenceActivity {
 
             }
             else if (preference instanceof EditTextPreference) {
-                if (preference.getKey().equals("rackbarcode_length") || preference.getKey().equals("itembarcode_length") || preference.getKey().equals("key_appversion")) {
+                if (preference.getKey().equals("rackbarcode_length") || preference.getKey().equals("itembarcode_length") ||
+                preference.getKey().equals("machineId_length") || preference.getKey().equals("workstep_length") || preference.getKey().equals("key_appversion")) {
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue);
+
                 }
             }else {
                 // For all other preferences, set the summary to the value's

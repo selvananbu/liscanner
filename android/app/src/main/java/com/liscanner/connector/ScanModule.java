@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -15,6 +19,9 @@ import com.facebook.react.bridge.ReactMethod;
 import com.liscanner.view.ScanActivity;
 import com.liscanner.view.settings.SettingsActivity;
 import com.liscanner.view.settings.SettingsActivity_test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.attr.duration;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -55,6 +62,33 @@ public class ScanModule extends ReactContextBaseJavaModule {
     void startSettings(){
         Intent settingIntent = new Intent(getCurrentActivity(), SettingsActivity_test.class);
         getCurrentActivity().startActivityForResult(settingIntent, 2);
+    }
+
+    @ReactMethod
+    void startGraphicsViewer(String datauri){
+        Intent sendIntent = new Intent();
+        List<Intent> targetedShareIntents = new ArrayList<Intent>();
+        String title = "View " + datauri + " Order in ....";
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra("Order No", datauri);
+        sendIntent.setType("text/plain");
+        List<ResolveInfo> resInfo = getCurrentActivity().getPackageManager().queryIntentActivities(sendIntent, 0);
+        if (!resInfo.isEmpty()) {
+            for (ResolveInfo resolveInfo : resInfo) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                targetedShareIntent.setType("text/plain");
+                if ((TextUtils.equals(packageName, "com.ligraphicsviewer" ))|| (TextUtils.equals(resolveInfo.activityInfo.processName,"com.google.android.apps.docs:Clipboard" )))
+                {
+                    targetedShareIntent.setPackage(packageName);
+                    targetedShareIntent.putExtra("Order No", datauri);
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+            }
+        }
+        Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), title);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[targetedShareIntents.size()]));
+        getCurrentActivity().startActivity(chooserIntent);
     }
 
     @ReactMethod

@@ -29,7 +29,7 @@ class LiFlatList extends Component {
 
 	constructor(props){
 		super(props);
-		this.state = { text: ' ' }
+		this.state = { text: ' ' ,isRack:false}
 	}
 	newHeight = 0;
 	newHeight = height(this.props.height);
@@ -65,7 +65,6 @@ class LiFlatList extends Component {
 		// console.log("*******!!!!",LiScannerMenu.testStatic);
 	}
 	render() {
-
 		if(this.props.columns == 1){
 			if(this.props.isReadyButton && this.props.isReadyQty){
 				this.readyButtonInReadyQty()
@@ -80,7 +79,16 @@ class LiFlatList extends Component {
 				this.defaultStyles()
 			}
 		}
-		return(this.returnView());
+
+		return(
+			<FlatList
+				data={ this.props.Menu }
+				renderItem={({item}) =>{
+					return (this.flatlistView(item));
+				}}
+				numColumns={this.props.columns}
+			/>
+		);
 	}
 	onTextEdited(text,item){
 		this.setState(text);
@@ -94,25 +102,40 @@ class LiFlatList extends Component {
 				}}
 				numColumns={this.props.columns}
 			/>
-	);
-}
-updateText(text,item){
-	if(item.key == '0'){
-		Actions.ItemReady({result:text});
+		);
 	}
-	else if(item.key == '1'){
-		Actions.ScanResult({ keyId: 'ITEM', result: text});
+	updateText(text,item){
+		if(item.key == '0'){
+			Actions.ItemReady({result:text});
+		}
+		else if(item.key == '3'){
+			this.props.setReasonId(text);
+			Actions.ItemBroken({PickerValueHolder:text});
+		}
+		else if(item.key == '4'){
+			Actions.ScanResult({keyId: 'ITEMREASON', result: text});
+		}
+		else if(item.key == '1'){
+			Actions.ScanResult({ keyId: 'ITEM', result: text});
+		}
+		else if(item.key == '5'){
+				console.log("@@@@@",item.key);
+			Actions.ReadyQuantityScanResult({ keyId: 'ITEM', result: text});
+		}
 	}
-}
-
-flatlistView(item){
-
+	onTextEditedRack(text,item){
+		this.setState(text);
+	}
+		updateTextRack(text){
+				console.log("@@@@@");
+				Actions.RackScanResult({ keyId: 'ITEM', result: text});
+		}
+	flatlistView(item){
 		var isSoftKeyEnabled = true;
 		if(Object.keys(this.props.obj.softkey) !== 0 && this.props.obj.softkey.SOFTKEY !== undefined && this.props.obj.softkey.SOFTKEY !== null){
-				isSoftKeyEnabled = this.props.obj.softkey.SOFTKEY;
+			isSoftKeyEnabled = this.props.obj.softkey.SOFTKEY;
 		}
-		console.log("@@@",isSoftKeyEnabled,this.props.isfinalScreen);
-	const textBarCode =  <TextInput
+		const textBarCode =  <TextInput
 			style={{height: 40,width:150,alignItems: 'center', justifyContent: 'center',fontWeight: 'bold',fontFamily: 'roboto'}}
 			underlineColorAndroid={'#881b4c'}
 			onChangeText={(text,item) => this.onTextEdited({text,item})}
@@ -121,24 +144,34 @@ flatlistView(item){
 			maxLength={10}
 			placeholder="Enter Barcode here..."
 		/>
-return(
-	<View style={this.styles1}>
-		<TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center'}} onPress={this.props.Gotomenu(item)}>
-			<Text style={this.stylesText1}  onPress={this.props.Gotomenu(item)} > {item.text}  </Text>
-		<Text style={styles.GridViewInsideTextItemStyle}>
-			{item.text === 'RACK' ? this.props.rackcode : this.props.itemcode}
-		</Text>
-		{isSoftKeyEnabled &&
-		this.props.isfinalScreen  ? textBarCode : <View/>
-	   }
-		<Image
-			source={{uri:item.MenuIcon_url}}
-			style={styles.ImageIconStyle}
+		const rackPrintBarcode =  <TextInput
+			style={{width:width(40),alignItems: 'center', justifyContent: 'center',fontWeight: 'bold',fontFamily: 'roboto'}}
+			underlineColorAndroid={'#881b4c'}
+			onChangeText={(text,item) => this.onTextEditedRack({text,item})}
+			onSubmitEditing={(event) => this.updateTextRack( event.nativeEvent.text,item)}
+			keyboardType= {'numeric'}
+			maxLength={10}
+			placeholder="Enter Barcode here"
 		/>
-	</TouchableOpacity>
-</View>
-);
-}
+		return(
+			<View style={this.styles1}>
+				<TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent: 'center'}} onPress={this.props.Gotomenu(item)}>
+					<Text style={this.stylesText1}  onPress={this.props.Gotomenu(item)} > {item.text}  </Text>
+					<Text style={styles.GridViewInsideTextItemStyle}>
+						{item.text === ('RACK' ) || item.text === ('REASON') ? this.props.rackcode : this.props.itemcode}
+					</Text>
+					{isSoftKeyEnabled &&
+						this.props.isfinalScreen  ? textBarCode : <View/>
+					}
+			  { isSoftKeyEnabled && this.props.isRackPrint  ? rackPrintBarcode : <View/>  }
+					<Image
+						source={{uri:item.MenuIcon_url}}
+						style={styles.ImageIconStyle}
+					/>
+				</TouchableOpacity>
+			</View>
+		);
+	}
 }
 function mapStateToProps(state) {
 	return {
@@ -151,7 +184,8 @@ function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		setRack: Action.setRack,
 		setBatch: Action.setBatch,
-		setSoftKey: Action.setSoftKey
+		setSoftKey: Action.setSoftKey,
+		setReasonId:Action.setReasonId
 	},dispatch)
 }
 

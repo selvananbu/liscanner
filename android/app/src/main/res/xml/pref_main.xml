@@ -26,12 +26,36 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_barcode_itemlength" />
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="405"
+            android:summary="@string/pref_summary_machineId"
+            android:inputType="number"
+            android:key="machineId_length"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_barcode_machineId" />
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="0"
+            android:summary="@string/pref_summary_workstepId"
+            android:inputType="number"
+            android:key="workstep_length"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_barcode_workstepId" />
     <SwitchPreference
         android:defaultValue="true"
         android:key="soft_scan_key"
         android:summary="@string/pref_description_soft_key_sumnmary"
         android:paddingTop="@dimen/nav_header_height"
         android:title="@string/pref_title_soft_key" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="any_wor"
+            android:title="@string/pref_title_vibrate" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Notification">

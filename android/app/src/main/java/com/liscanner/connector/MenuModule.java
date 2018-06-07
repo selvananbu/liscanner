@@ -2,11 +2,16 @@ package com.liscanner.connector;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.liscanner.MainActivity;
 import com.reactlibrary.JSBundleManager;
 import com.reactlibrary.JSBundleManagerActivity;
@@ -62,7 +67,6 @@ public class MenuModule extends ReactContextBaseJavaModule {
         });
     }
    }
-
     @ReactMethod
     public void startConnectionActivity(){
         if(mreactContext != null && !isFileExistInDevice(mreactContext)){

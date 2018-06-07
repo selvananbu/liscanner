@@ -6,7 +6,7 @@ import {
 	TouchableOpacity,
 	TouchableHighlightStatic,
 	Animated,
-  DeviceEventEmitter,
+	DeviceEventEmitter,
 	BackHandler,
 	Easing,Text,FlatList,TouchableHighlight,Alert,
 } from 'react-native';
@@ -15,10 +15,15 @@ import { ThemeProvider } from 'react-native-material-ui';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import {Button,Container,Content,Header,Left} from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
+
 import item from './image/item.png';
 import rack from './image/rack.png';
+import item_delivery_note from './image/delivery_note.png';
 import commission from './image/commission.png';
 import utilities from './image/utilities.png';
+import item_broken from './image/item_broken.png';
+import item_reload from './image/item_reload.png';
+import right_li from './image/right_dir.png';
 
 import * as Action from './liaction/index';
 import { connect } from 'react-redux';
@@ -28,9 +33,9 @@ import ScanExample from './nativeconnector/scanconnector';
 
 const SIZE = window.width;
 
- class LiScannerMenu extends Component {
+class LiScannerMenu extends Component {
 
-	 static testStatic = false;
+	static testStatic = false;
 	constructor(props) {
 		super(props);
 
@@ -55,6 +60,10 @@ const SIZE = window.width;
 					key: 'UTILITIES',
 					MenuIcon_url:'src_image_utilities'
 				},
+				{
+					key: 'DELIVERY NOTE',
+					MenuIcon_url:'src_image_delivery_note'
+				},
 			],
 			MenuIcon_url:[
 				{}
@@ -62,33 +71,39 @@ const SIZE = window.width;
 		};
 	}
 	Gotomenu  = (item) => {
+		console.log("Called");
 		if (item==="ITEM")
 		{
-			 Actions.ItemMenu()
+			this.props.clearItem();
+			Actions.ItemMenu({title:'LiScanner - Item'})
 		}
 		else if (item==="RACK")
 		{
-			 Actions.RackMenu()
-		}
-		else if (item==="COMMISSION")
-		{
-			 Actions.Commission()
+			 Actions.RackMenu({title:'LiScanner - Rack'})
 		}
 		else if (item === "UTILITIES")
-		 {
-			 ScanExample.startSettings();
-		 }
-		 else
-				Alert.alert(item);
+		{
+			ScanExample.startSettings();
+		}
+		else
+		Alert.alert(item);
 	}
 
 	componentDidMount(){
 		ScanExample.setTitle("LiScanner");
-	    DeviceEventEmitter.addListener('onSoftKeyDisabled', function (e: Event) {
-				if(e.softkey != null && e.softkey != undefined){
-					this.props.setSoftKey(e.softkey)
-				}
-			}.bind(this));
+		DeviceEventEmitter.addListener('onSoftKeyDisabled', function (e: Event) {
+			if(e.softkey != null && e.softkey != undefined){
+				this.props.setSoftKey(e.softkey)
+			}
+		}.bind(this));
+
+		DeviceEventEmitter.addListener('sendWorkStepId', function (e: Event) {
+			if(e.machineId != null && e.machineId != undefined){
+				this.props.setMachineId(e.machineId);
+			}
+		}.bind(this));
+		this.props.setReadyDisabled(false);
+		this.props.setUndoDisabled(true);
 	}
 
 
@@ -97,27 +112,32 @@ const SIZE = window.width;
 	}
 	returnView(){
 		return (
-			<View style={{flex:1}}>
+			<View style={{flex:1,height:height(85),backgroundColor:'lightgrey'}}>
 				<FlatList data={ this.state.GridViewItems} renderItem={({item}) =>{
-						return(this.flatlistView(item));
-					}
+					return(this.flatlistView(item));
 				}
-				numColumns={2}
-			/>
-		</View>
-	);
+			}
+			numColumns={1}
+		/>
+	</View>
+);
 }
 flatlistView(item){
 	return(
-		<View style={{flex:1}}>
-			<View style={styles.GridViewBlockStyle}>
-				<TouchableOpacity style={{height:1000,width:1000,alignItems: 'center', justifyContent:'center',}}onPress={this.Gotomenu.bind(this, item.key)}>
+		<View style={styles.GridViewBlockStyle} >
+			<View>
+				<Image source={{uri:item.MenuIcon_url}} style={styles.ImageIconStyle} resizeMode='contain'/>
+			</View>
+			<View style={{width:width(70),justifyContent:'center',}}>
+				<TouchableOpacity onPress={this.Gotomenu.bind(this, item.key)}>
 					<Text style={styles.GridViewInsideTextItemStyle} > {item.key} </Text>
-				<Image source={{uri:item.MenuIcon_url}} style={styles.ImageIconStyle}/>
-		</TouchableOpacity>
-	</View>
-</View>
-);
+				</TouchableOpacity>
+			</View>
+			<TouchableOpacity onPress={this.Gotomenu.bind(this, item.key)}>
+				<Image source={{uri:'src_image_right_dir'}} style={styles.ImageIconStyle2}  resizeMode='contain'/>
+			</TouchableOpacity>
+		</View>
+	);
 }
 }
 function mapStateToProps(state) {
@@ -131,7 +151,11 @@ function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		setRack: Action.setRack,
 		setBatch: Action.setBatch,
-		setSoftKey: Action.setSoftKey
+		setSoftKey: Action.setSoftKey,
+		clearItem: Action.clearItem,
+		setMachineId:Action.setMachineId,
+		setReadyDisabled: Action.setReadyDisabled,
+		setUndoDisabled: Action.setUndoDisabled,
 	},dispatch)
 }
 
@@ -142,24 +166,28 @@ export default connect(
 const styles = StyleSheet.create({
 
 	GridViewBlockStyle: {
-		borderColor:'#000',
-		borderWidth:1,
-		justifyContent: 'center',
 		flex:1,
+		height:height(88/5),
+		flexDirection:'row',
+		backgroundColor: 'whitesmoke',
+		borderTopColor:'#000',
+		borderBottomColor:'#000',
+		borderTopWidth:0.5,
+		borderTopWidth:height(0.1),
+		borderBottomWidth:height(0.1),
+		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: height(41.5),
-		margin: 6,
-		//backgroundColor: 'rgba(134,27,76,0.8)',  //#00BCD4
-		// backgroundColor:'transparent',
-		backgroundColor: 'rgba(89,89,89,0.5)',
-
+		shadowRadius: 20,
+		elevation: 5,
 	},
 	GridViewInsideTextItemStyle: {
+		paddingTop: 1,
+		paddingBottom: 1,
 		color: '#881b4c',
-		padding: 10,
 		fontSize: 26,
-		fontWeight: 'bold',
-		fontFamily: 'roboto',
+		textShadowOffset:{wdith:2.5,height:2},
+		fontWeight: '400',
+		textShadowColor:'lightgrey',
 		justifyContent: 'center',
 	},
 
@@ -181,18 +209,28 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	ImageIconStyle: {
-		padding: 10,
-		margin: 5,
-		height: 75,
-		width: 75,
-		resizeMode : 'stretch',
+		padding: 0.5,
+		marginHorizontal: width(2.5),
+		paddingHorizontal: width(2),
+		margin: 2,
+		width: width(10),
+		height: height(10),
+		resizeMode : 'contain',
 
 	},
-	SeparatorLine :{
+	ImageIconStyle2: {
+		marginLeft: 5,
+		paddingHorizontal: 1,
+		margin: 2,
+		height: height(8),
+		width: width(8),
+		resizeMode : 'contain',
 
+	},
+
+	SeparatorLine :{
 		backgroundColor : '#fff',
 		width: 1,
 		height: 40
-
 	}
 });

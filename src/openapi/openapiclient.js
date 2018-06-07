@@ -1,7 +1,7 @@
 import OpenApiBody from './openapibody'
 
 class OpenApiClient{
-    
+
     constructor(host, customer, site, service){
         this.host = host;
         this.customer = customer;
@@ -26,7 +26,7 @@ class OpenApiClient{
             if(first){
                 url += '?';
                 first = false;
-            }   
+            }
             else{
                 url += '&';
             }
@@ -37,9 +37,7 @@ class OpenApiClient{
     }
 
     verifyParamIsInteger(par, allowNull = false){
-        console.log(par,allowNull,'asd');
         if(par === null || par === undefined){
-            
            return (allowNull ? true : false);
         }
         if(Number.isInteger(parseInt(par))){
@@ -51,7 +49,7 @@ class OpenApiClient{
         }
     }
 
-    verifyParamIsString(par, allowNull){
+    verifyParamIsString(par, allowNull = false){
         if(par === null || par === undefined){
            return (allowNull ? true : false);
         }
